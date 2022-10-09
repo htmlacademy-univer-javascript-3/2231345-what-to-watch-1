@@ -1,134 +1,36 @@
-function PlayerScreen() : JSX.Element {
+function PlayerScreen(): JSX.Element {
   return (
-    <div className="user-page">
-      <header className="page-header user-page__head">
-        <div className="logo">
-          <a href="main.html" className="logo__link">
-            <span className="logo__letter logo__letter--1">W</span>
-            <span className="logo__letter logo__letter--2">T</span>
-            <span className="logo__letter logo__letter--3">W</span>
-          </a>
+    <div className="player">
+      <video src="#" className="player__video" poster="img/player-poster.jpg"></video>
+
+      <button type="button" className="player__exit">Exit</button>
+
+      <div className="player__controls">
+        <div className="player__controls-row">
+          <div className="player__time">
+            <progress className="player__progress" value="30" max="100"></progress>
+            <div className="player__toggler" style={{left: '30%'}}>Toggler</div>
+          </div>
+          <div className="player__time-value">1:30:29</div>
         </div>
 
-        <h1 className="page-title user-page__title">My list <span className="user-page__film-count">9</span></h1>
-        <ul className="user-block">
-          <li className="user-block__item">
-            <div className="user-block__avatar">
-              <img src="img/avatar.jpg" alt="User avatar" width="63" height="63"/>
-            </div>
-          </li>
-          <li className="user-block__item">
-            <a className="user-block__link">Sign out</a>
-          </li>
-        </ul>
-      </header>
+        <div className="player__controls-row">
+          <button type="button" className="player__play">
+            <svg viewBox="0 0 19 19" width="19" height="19">
+              <use xlinkHref="#play-s"></use>
+            </svg>
+            <span>Play</span>
+          </button>
+          <div className="player__name">Transpotting</div>
 
-      <section className="catalog">
-        <h2 className="catalog__title visually-hidden">Catalog</h2>
-
-        <div className="catalog__films-list">
-          <article className="small-film-card catalog__films-card">
-            <div className="small-film-card__image">
-              <img src="img/fantastic-beasts-the-crimes-of-grindelwald.jpg"
-                alt="Fantastic Beasts: The Crimes of Grindelwald" width="280" height="175"
-              />
-            </div>
-            <h3 className="small-film-card__title">
-              <a className="small-film-card__link" href="film-page.html">Fantastic Beasts: The Crimes of Grindelwald</a>
-            </h3>
-          </article>
-
-          <article className="small-film-card catalog__films-card">
-            <div className="small-film-card__image">
-              <img src="img/bohemian-rhapsody.jpg" alt="Bohemian Rhapsody" width="280" height="175"/>
-            </div>
-            <h3 className="small-film-card__title">
-              <a className="small-film-card__link" href="film-page.html">Bohemian Rhapsody</a>
-            </h3>
-          </article>
-
-          <article className="small-film-card catalog__films-card">
-            <div className="small-film-card__image">
-              <img src="img/macbeth.jpg" alt="Macbeth" width="280" height="175"/>
-            </div>
-            <h3 className="small-film-card__title">
-              <a className="small-film-card__link" href="film-page.html">Macbeth</a>
-            </h3>
-          </article>
-
-          <article className="small-film-card catalog__films-card">
-            <div className="small-film-card__image">
-              <img src="img/aviator.jpg" alt="Aviator" width="280" height="175"/>
-            </div>
-            <h3 className="small-film-card__title">
-              <a className="small-film-card__link" href="film-page.html">Aviator</a>
-            </h3>
-          </article>
-
-
-          <article className="small-film-card catalog__films-card">
-            <div className="small-film-card__image">
-              <img src="img/we-need-to-talk-about-kevin.jpg" alt="We need to talk about Kevin" width="280"
-                height="175"
-              />
-            </div>
-            <h3 className="small-film-card__title">
-              <a className="small-film-card__link" href="film-page.html">We need to talk about Kevin</a>
-            </h3>
-          </article>
-
-          <article className="small-film-card catalog__films-card">
-            <div className="small-film-card__image">
-              <img src="img/what-we-do-in-the-shadows.jpg" alt="What We Do in the Shadows" width="280" height="175"/>
-            </div>
-            <h3 className="small-film-card__title">
-              <a className="small-film-card__link" href="film-page.html">What We Do in the Shadows</a>
-            </h3>
-          </article>
-
-          <article className="small-film-card catalog__films-card">
-            <div className="small-film-card__image">
-              <img src="img/revenant.jpg" alt="Revenant" width="280" height="175"/>
-            </div>
-            <h3 className="small-film-card__title">
-              <a className="small-film-card__link" href="film-page.html">Revenant</a>
-            </h3>
-          </article>
-
-          <article className="small-film-card catalog__films-card">
-            <div className="small-film-card__image">
-              <img src="img/johnny-english.jpg" alt="Johnny English" width="280" height="175"/>
-            </div>
-            <h3 className="small-film-card__title">
-              <a className="small-film-card__link" href="film-page.html">Johnny English</a>
-            </h3>
-          </article>
-
-
-          <article className="small-film-card catalog__films-card">
-            <div className="small-film-card__image">
-              <img src="img/shutter-island.jpg" alt="Shutter Island" width="280" height="175"/>
-            </div>
-            <h3 className="small-film-card__title">
-              <a className="small-film-card__link" href="film-page.html">Shutter Island</a>
-            </h3>
-          </article>
+          <button type="button" className="player__full-screen">
+            <svg viewBox="0 0 27 27" width="27" height="27">
+              <use xlinkHref="#full-screen"></use>
+            </svg>
+            <span>Full screen</span>
+          </button>
         </div>
-      </section>
-
-      <footer className="page-footer">
-        <div className="logo">
-          <a href="main.html" className="logo__link logo__link--light">
-            <span className="logo__letter logo__letter--1">W</span>
-            <span className="logo__letter logo__letter--2">T</span>
-            <span className="logo__letter logo__letter--3">W</span>
-          </a>
-        </div>
-
-        <div className="copyright">
-          <p>© 2019 What to watch Ltd.</p>
-        </div>
-      </footer>
+      </div>
     </div>
   );
 }
