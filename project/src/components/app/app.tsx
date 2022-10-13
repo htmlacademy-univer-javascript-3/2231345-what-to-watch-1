@@ -10,26 +10,28 @@ import AddReviewScreen from '../../pages/add-review-screen/add-review-screen';
 import PlayerScreen from '../../pages/player-screen/player-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 
-function App(props: MainScreenProps): JSX.Element {
+type AppProps = MainScreenProps
+
+function App(props: AppProps): JSX.Element {
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route path='/'>
-            <Route index element={<MainScreen name={props.name} releaseYear={props.releaseYear} genre={props.genre}/>}/>
+            <Route index element={<MainScreen {...props}/>}/>
             <Route path='login' element={<SignInScreen/>}/>
             <Route path='mylist' element=
               {
-                <PrivateRoute authorizationStatus={AuthorizationStatus.NoAuth}>
-                  <MyListScreen/>
+                <PrivateRoute authorizationStatus={AuthorizationStatus.Auth}>
+                  <MyListScreen {...props}/>
                 </PrivateRoute>
               }
             />
             <Route path='films/:id'>
-              <Route index element={<FilmPageScreen/>}/>
-              <Route path='review' element={<AddReviewScreen/>}/>
+              <Route index element={<FilmPageScreen film={props.films[0]}/>}/>
+              <Route path='review' element={<AddReviewScreen {...props.films[0]}/>}/>
             </Route>
-            <Route path='player/:id' element={<PlayerScreen/>}/>
+            <Route path='player/:id' element={<PlayerScreen {...props.films[0]}/>}/>
           </Route>
           <Route path='*' element={<NotFoundScreen/>}/>
 

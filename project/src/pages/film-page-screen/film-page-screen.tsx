@@ -1,22 +1,26 @@
-function FilmPageScreen(): JSX.Element {
+import Logo from '../../components/logo/logo';
+import {Link} from 'react-router-dom';
+import {Film} from '../../types/film';
+import {AppRoute} from '../../consts';
+
+type FilmPageScreenProps = {
+  film: Film
+}
+
+function FilmPageScreen({film}: FilmPageScreenProps): JSX.Element {
   return (
     <>
       <section className="film-card film-card--full">
         <div className="film-card__hero">
           <div className="film-card__bg">
-            <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel"/>
+            <img src={film.poster} alt={film.name}/>
           </div>
 
           <h1 className="visually-hidden">WTW</h1>
 
           <header className="page-header film-card__head">
-            <div className="logo">
-              <a href="main.html" className="logo__link">
-                <span className="logo__letter logo__letter--1">W</span>
-                <span className="logo__letter logo__letter--2">T</span>
-                <span className="logo__letter logo__letter--3">W</span>
-              </a>
-            </div>
+
+            <Logo isLight={false}/>
 
             <ul className="user-block">
               <li className="user-block__item">
@@ -25,17 +29,17 @@ function FilmPageScreen(): JSX.Element {
                 </div>
               </li>
               <li className="user-block__item">
-                <a className="user-block__link">Sign out</a>
+                <Link to={AppRoute.SignIn} className="user-block__link">Sign out</Link>
               </li>
             </ul>
           </header>
 
           <div className="film-card__wrap">
             <div className="film-card__desc">
-              <h2 className="film-card__title">The Grand Budapest Hotel</h2>
+              <h2 className="film-card__title">{film.name}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">Drama</span>
-                <span className="film-card__year">2014</span>
+                <span className="film-card__genre">{film.genres.join(' ')}</span>
+                <span className="film-card__year">{film.releaseYear}</span>
               </p>
 
               <div className="film-card__buttons">
@@ -52,7 +56,7 @@ function FilmPageScreen(): JSX.Element {
                   <span>My list</span>
                   <span className="film-card__count">9</span>
                 </button>
-                <a href="add-review.html" className="btn film-card__button">Add review</a>
+                <Link to={`/films/${film.id}/review`} className="btn film-card__button">Add review</Link>
               </div>
             </div>
           </div>
@@ -61,7 +65,7 @@ function FilmPageScreen(): JSX.Element {
         <div className="film-card__wrap film-card__translate-top">
           <div className="film-card__info">
             <div className="film-card__poster film-card__poster--big">
-              <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218"
+              <img src={film.poster} alt={`${film.name} poster`} width="218"
                 height="327"
               />
             </div>
@@ -82,27 +86,19 @@ function FilmPageScreen(): JSX.Element {
               </nav>
 
               <div className="film-rating">
-                <div className="film-rating__score">8,9</div>
+                <div className="film-rating__score">{film.rating}</div>
                 <p className="film-rating__meta">
                   <span className="film-rating__level">Very good</span>
-                  <span className="film-rating__count">240 ratings</span>
+                  <span className="film-rating__count">{film.ratingCount} ratings</span>
                 </p>
               </div>
 
               <div className="film-card__text">
-                <p>In the 1930s, the Grand Budapest Hotel is a popular European ski resort, presided over by concierge
-                  Gustave H. (Ralph Fiennes). Zero, a junior lobby boy, becomes Gustave&apos;s friend and protege.
-                </p>
+                {film.description}
 
-                <p>Gustave prides himself on providing first-class service to the hotel&apos;s guests, including satisfying
-                  the
-                  sexual needs of the many elderly women who stay there. When one of Gustave&apos;s lovers dies mysteriously,
-                  Gustave finds himself the recipient of a priceless painting and the chief suspect in her murder.
-                </p>
+                <p className="film-card__director"><strong>Directors: {film.directors}</strong></p>
 
-                <p className="film-card__director"><strong>Director: Wes Anderson</strong></p>
-
-                <p className="film-card__starring"><strong>Starring: Bill Murray, Edward Norton, Jude Law, Willem Dafoe and other</strong>
+                <p className="film-card__starring"><strong>Starring: {film.starring.slice(0, 4).join(', ')} и другие</strong>
                 </p>
               </div>
             </div>
@@ -158,13 +154,7 @@ function FilmPageScreen(): JSX.Element {
         </section>
 
         <footer className="page-footer">
-          <div className="logo">
-            <a href="main.html" className="logo__link logo__link--light">
-              <span className="logo__letter logo__letter--1">W</span>
-              <span className="logo__letter logo__letter--2">T</span>
-              <span className="logo__letter logo__letter--3">W</span>
-            </a>
-          </div>
+          <Logo isLight/>
 
           <div className="copyright">
             <p>© 2019 What to watch Ltd.</p>
