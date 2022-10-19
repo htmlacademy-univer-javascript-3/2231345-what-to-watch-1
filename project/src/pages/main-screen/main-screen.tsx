@@ -1,6 +1,6 @@
 import {Film} from '../../types/film';
 import FilmsList from '../../components/films-list';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {AppRoute} from '../../consts';
 import Logo from '../../components/logo/logo';
 
@@ -10,6 +10,7 @@ export type MainScreenProps = {
 }
 
 function MainScreen({headerFilm, films}: MainScreenProps) {
+  const navigate = useNavigate();
   return (
     <>
       <section className="film-card">
@@ -48,14 +49,13 @@ function MainScreen({headerFilm, films}: MainScreenProps) {
               </p>
 
               <div className="film-card__buttons">
-                <Link to={`/player/${headerFilm.id}`}>
-                  <button className="btn btn--play film-card__button" type="button">
-                    <svg viewBox="0 0 19 19" width="19" height="19">
-                      <use xlinkHref="#play-s"></use>
-                    </svg>
-                    <span>Play</span>
-                  </button>
-                </Link>
+                <button className="btn btn--play film-card__button" type="button"
+                        onClick={() => navigate(`/player/${headerFilm.id}`)}>
+                  <svg viewBox="0 0 19 19" width="19" height="19">
+                    <use xlinkHref="#play-s"></use>
+                  </svg>
+                  <span>Play</span>
+                </button>
                 <button className="btn btn--list film-card__button" type="button">
                   <svg viewBox="0 0 19 20" width="19" height="20">
                     <use xlinkHref="#add"></use>

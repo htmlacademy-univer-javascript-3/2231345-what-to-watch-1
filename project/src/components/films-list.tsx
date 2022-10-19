@@ -7,7 +7,7 @@ type FilmsListProps = {
 }
 
 function FilmsList({films}: FilmsListProps) {
-  const setId = useState('')[1];
+  const [, setId] = useState('');
 
   const mouseEnterHandle = (id: string) => setId(id);
 
