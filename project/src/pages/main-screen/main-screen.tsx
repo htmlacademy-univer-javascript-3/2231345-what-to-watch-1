@@ -1,12 +1,16 @@
-import FilmCard from '../../components/film-card/film-card';
+import {Film} from '../../types/film';
+import FilmsList from '../../components/films-list';
+import {Link, useNavigate} from 'react-router-dom';
+import {AppRoute} from '../../consts';
+import Logo from '../../components/logo/logo';
 
 export type MainScreenProps = {
-  name: string
-  releaseYear : number
-  genre: string
+  headerFilm: Film
+  films: Film[]
 }
 
-function MainScreen({name, releaseYear, genre} : MainScreenProps) {
+function MainScreen({headerFilm, films}: MainScreenProps) {
+  const navigate = useNavigate();
   return (
     <>
       <section className="film-card">
@@ -17,13 +21,7 @@ function MainScreen({name, releaseYear, genre} : MainScreenProps) {
         <h1 className="visually-hidden">WTW</h1>
 
         <header className="page-header film-card__head">
-          <div className="logo">
-            <a className="logo__link">
-              <span className="logo__letter logo__letter--1">W</span>
-              <span className="logo__letter logo__letter--2">T</span>
-              <span className="logo__letter logo__letter--3">W</span>
-            </a>
-          </div>
+          <Logo isLight={false}/>
 
           <ul className="user-block">
             <li className="user-block__item">
@@ -32,7 +30,7 @@ function MainScreen({name, releaseYear, genre} : MainScreenProps) {
               </div>
             </li>
             <li className="user-block__item">
-              <a className="user-block__link">Sign out</a>
+              <Link to={AppRoute.SignIn} className="user-block__link">Sign out</Link>
             </li>
           </ul>
         </header>
@@ -40,18 +38,19 @@ function MainScreen({name, releaseYear, genre} : MainScreenProps) {
         <div className="film-card__wrap">
           <div className="film-card__info">
             <div className="film-card__poster">
-              <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327"/>
+              <img src={headerFilm.poster} alt={`${headerFilm.name} poster`} width="218" height="327"/>
             </div>
 
             <div className="film-card__desc">
-              <h2 className="film-card__title">{name}</h2>
+              <h2 className="film-card__title">{headerFilm.name}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">{genre}</span>
-                <span className="film-card__year">{releaseYear}</span>
+                <span className="film-card__genre">{headerFilm.genres.join(' ')}</span>
+                <span className="film-card__year">{headerFilm.releaseYear}</span>
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
+                <button className="btn btn--play film-card__button" type="button"
+                        onClick={() => navigate(`/player/${headerFilm.id}`)}>
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
                   </svg>
@@ -107,60 +106,7 @@ function MainScreen({name, releaseYear, genre} : MainScreenProps) {
             </li>
           </ul>
 
-          <div className="catalog__films-list">
-            <FilmCard
-              imgSrc="img/fantastic-beasts-the-crimes-of-grindelwald.jpg"
-              filmName="Fantastic Beasts: The Crimes of Grindelwald"
-            />
-
-            <FilmCard
-              imgSrc="img/bohemian-rhapsody.jpg"
-              filmName="Bohemian Rhapsody"
-            />
-
-            <FilmCard imgSrc="img/macbeth.jpg" filmName="Macbeth"/>
-
-            <FilmCard imgSrc="img/aviator.jpg" filmName="Aviator"/>
-
-            <FilmCard
-              imgSrc="img/we-need-to-talk-about-kevin.jpg"
-              filmName="We need to talk about Kevin"
-            />
-
-            <FilmCard
-              imgSrc="img/what-we-do-in-the-shadows.jpg"
-              filmName="What We Do in the Shadows"
-            />
-
-            <FilmCard imgSrc="img/revenant.jpg" filmName="Revenant"/>
-
-            <FilmCard imgSrc="img/johnny-english.jpg" filmName="Johnny English"/>
-
-            <FilmCard imgSrc="img/shutter-island.jpg" filmName="Shutter Island"/>
-
-            <FilmCard imgSrc="img/pulp-fiction.jpg" filmName="Pulp Fiction"/>
-
-            <FilmCard imgSrc="img/no-country-for-old-men.jpg" filmName="No Country for Old Men"/>
-
-            <FilmCard imgSrc="img/snatch.jpg" filmName="Snatch"/>
-
-            <FilmCard imgSrc="img/moonrise-kingdom.jpg" filmName="Moonrise Kingdom"/>
-
-            <FilmCard imgSrc="img/seven-years-in-tibet.jpg" filmName="Seven Years in Tibet"/>
-
-            <FilmCard imgSrc="img/midnight-special.jpg" filmName="Midnight Special"/>
-
-            <FilmCard imgSrc="img/war-of-the-worlds.jpg" filmName="War of the Worlds"/>
-
-            <FilmCard imgSrc="img/dardjeeling-limited.jpg" filmName="Dardjeeling Limited"/>
-
-            <FilmCard imgSrc="img/orlando.jpg" filmName="Orlando"/>
-
-            <FilmCard imgSrc="img/mindhunter.jpg" filmName="Mindhunter"/>
-
-            <FilmCard imgSrc="img/midnight-special.jpg" filmName="Midnight Special"/>
-
-          </div>
+          <FilmsList films={films}/>
 
           <div className="catalog__more">
             <button className="catalog__button" type="button">Show more</button>
@@ -168,13 +114,7 @@ function MainScreen({name, releaseYear, genre} : MainScreenProps) {
         </section>
 
         <footer className="page-footer">
-          <div className="logo">
-            <a className="logo__link logo__link--light">
-              <span className="logo__letter logo__letter--1">W</span>
-              <span className="logo__letter logo__letter--2">T</span>
-              <span className="logo__letter logo__letter--3">W</span>
-            </a>
-          </div>
+          <Logo isLight/>
 
           <div className="copyright">
             <p>© 2019 What to watch Ltd.</p>

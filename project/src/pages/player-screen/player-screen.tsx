@@ -1,9 +1,17 @@
-function PlayerScreen(): JSX.Element {
+import {Link} from 'react-router-dom';
+import {AppRoute} from '../../consts';
+
+type PlayerScreenProps = {
+  source: string,
+  poster: string
+}
+
+function PlayerScreen(props: PlayerScreenProps): JSX.Element {
   return (
     <div className="player">
-      <video src="#" className="player__video" poster="img/player-poster.jpg"></video>
+      <video src={props.source} className="player__video" poster={props.poster}></video>
 
-      <button type="button" className="player__exit">Exit</button>
+      <Link to={AppRoute.Main}><button type="button" className="player__exit">Exit</button></Link>
 
       <div className="player__controls">
         <div className="player__controls-row">
