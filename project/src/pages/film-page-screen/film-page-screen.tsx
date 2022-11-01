@@ -2,6 +2,7 @@ import Logo from '../../components/logo/logo';
 import {Link} from 'react-router-dom';
 import {Film} from '../../types/film';
 import {AppRoute} from '../../consts';
+import Tabs from '../../components/tabs/tabs';
 
 type FilmPageScreenProps = {
   film: Film
@@ -65,43 +66,10 @@ function FilmPageScreen({film}: FilmPageScreenProps): JSX.Element {
         <div className="film-card__wrap film-card__translate-top">
           <div className="film-card__info">
             <div className="film-card__poster film-card__poster--big">
-              <img src={film.poster} alt={`${film.name} poster`} width="218"
-                height="327"
-              />
+              <img src={film.poster} alt={`${film.name} poster`} width="218" height="327"/>
             </div>
 
-            <div className="film-card__desc">
-              <nav className="film-nav film-card__nav">
-                <ul className="film-nav__list">
-                  <li className="film-nav__item film-nav__item--active">
-                    <a href="#" className="film-nav__link">Overview</a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">Details</a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">Reviews</a>
-                  </li>
-                </ul>
-              </nav>
-
-              <div className="film-rating">
-                <div className="film-rating__score">{film.rating}</div>
-                <p className="film-rating__meta">
-                  <span className="film-rating__level">Very good</span>
-                  <span className="film-rating__count">{film.ratingCount} ratings</span>
-                </p>
-              </div>
-
-              <div className="film-card__text">
-                {film.description}
-
-                <p className="film-card__director"><strong>Directors: {film.directors}</strong></p>
-
-                <p className="film-card__starring"><strong>Starring: {film.starring.slice(0, 4).join(', ')} и другие</strong>
-                </p>
-              </div>
-            </div>
+            <Tabs film={film}/>
           </div>
         </div>
       </section>
