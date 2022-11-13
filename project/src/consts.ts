@@ -11,8 +11,26 @@ export enum AppRoute {
 }
 
 
-export enum FilmPageTabs {
+export enum FilmPageTab {
   Overview = 'Overview',
   Details = 'Details',
   Reviews = 'Reviews'
+}
+
+export enum Genre {
+  All = 'все жанры',
+  Fantasy = 'фэнтези',
+  Adventure = 'приключения',
+  Family = 'семейный',
+  Biography = 'биография',
+  Musical = 'музыка',
+  Drama = 'драма',
+  Historical = 'история',
+  War = 'военный',
+  Thriller = 'триллер',
+  Detective = 'детектив',
+  Comedy = 'комедия',
+  Horror = 'ужасы',
+  Western = 'вестерн',
+  Action = 'боевик'
 }

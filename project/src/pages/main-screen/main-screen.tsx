@@ -1,16 +1,21 @@
 import {Film} from '../../types/film';
-import FilmsList from '../../components/films-list';
+import FilmsList from '../../components/films-list/films-list';
 import {Link, useNavigate} from 'react-router-dom';
 import {AppRoute} from '../../consts';
 import Logo from '../../components/logo/logo';
+import GenresList from '../../components/genres-list/genres-list';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {getFilms, setGenre} from '../../store/action';
 
 export type MainScreenProps = {
   headerFilm: Film
-  films: Film[]
 }
 
-function MainScreen({headerFilm, films}: MainScreenProps) {
+function MainScreen({headerFilm}: MainScreenProps) {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+
   return (
     <>
       <section className="film-card">
@@ -49,7 +54,9 @@ function MainScreen({headerFilm, films}: MainScreenProps) {
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button" onClick={() => navigate(`/player/${headerFilm.id}`)}>
+                <button className="btn btn--play film-card__button" type="button"
+                  onClick={() => navigate(`/player/${headerFilm.id}`)}
+                >
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
                   </svg>
@@ -72,40 +79,15 @@ function MainScreen({headerFilm, films}: MainScreenProps) {
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-          <ul className="catalog__genres-list">
-            <li className="catalog__genres-item catalog__genres-item--active">
-              <a href="#" className="catalog__genres-link">All genres</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Comedies</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Crime</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Documentary</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Dramas</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Horror</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Kids & Family</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Romance</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Sci-Fi</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Thrillers</a>
-            </li>
-          </ul>
+          {
+            <GenresList onItemClick={(genre) => {
+              dispatch(setGenre({genre}));
+              dispatch(getFilms());
+            }}
+            />
+          }
 
-          <FilmsList films={films}/>
+          <FilmsList films={useAppSelector((state) => state.films)}/>
 
           <div className="catalog__more">
             <button className="catalog__button" type="button">Show more</button>
