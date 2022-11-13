@@ -6,6 +6,7 @@ import Logo from '../../components/logo/logo';
 import GenresList from '../../components/genres-list/genres-list';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {getFilms, setGenre} from '../../store/action';
+import ShowMoreButton from '../../components/show-more-button/show-more-button';
 
 export type MainScreenProps = {
   headerFilm: Film
@@ -14,7 +15,7 @@ export type MainScreenProps = {
 function MainScreen({headerFilm}: MainScreenProps) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
+  const {size, page, totalCount, films} = useAppSelector((state) => state);
 
   return (
     <>
@@ -82,16 +83,19 @@ function MainScreen({headerFilm}: MainScreenProps) {
           {
             <GenresList onItemClick={(genre) => {
               dispatch(setGenre({genre}));
-              dispatch(getFilms());
+              dispatch(getFilms({page: 1, size: 8}));
             }}
             />
           }
 
-          <FilmsList films={useAppSelector((state) => state.films)}/>
+          <FilmsList films={films}/>
 
-          <div className="catalog__more">
-            <button className="catalog__button" type="button">Show more</button>
-          </div>
+          {page * size < totalCount &&
+            <ShowMoreButton onClick={() => {
+              dispatch(getFilms({page: page + 1, size: size}));
+            }}
+            />}
+
         </section>
 
         <footer className="page-footer">

@@ -4,21 +4,34 @@ import {films} from '../mocks/films';
 import {Genre} from '../consts';
 
 const initialState = {
+  page: 1,
+  size: 8,
+  totalCount: films.length,
   genre: Genre.All,
-  films: films
+  films: films.slice(0, 8)
 };
 
 export const reducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(getFilms, (state) => {
+    .addCase(getFilms, (state, action) => {
+      state.page = action.payload.page;
+      state.size = action.payload.size;
+
+      const {page, size} = action.payload;
+      const begin = (page - 1) * size;
+
       if (state.genre === Genre.All) {
-        state.films = films;
+        state.films.push(...films.slice(begin, begin + size));
+        state.totalCount = films.length;
       } else {
-        state.films = films.filter((film) => film.genres.find((genre) => genre === state.genre));
+        const filteredFilms = films.filter((film) => film.genres.find((genre) => genre === state.genre));
+        state.films.push(...filteredFilms.slice(begin, begin + size));
+        state.totalCount = filteredFilms.length;
       }
     }
     )
     .addCase(setGenre, (state, action) => {
       state.genre = action.payload.genre;
+      state.films = [];
     });
 });
