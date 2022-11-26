@@ -1,5 +1,4 @@
 import {createAction} from '@reduxjs/toolkit';
-import {Genre} from '../consts';
 
-export const getFilms = createAction('films/getFilms');
-export const setGenre = createAction<{genre: Genre}>('films/setGenre');
+export const setFilms = createAction<{page: number, size: number}>('films/setFilms');
+export const setGenre = createAction<{genre: string}>('films/setGenre');

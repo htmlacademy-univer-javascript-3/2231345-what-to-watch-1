@@ -9,8 +9,11 @@ import FilmPageScreen from '../../pages/film-page-screen/film-page-screen';
 import AddReviewScreen from '../../pages/add-review-screen/add-review-screen';
 import PlayerScreen from '../../pages/player-screen/player-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
+import {Film} from '../../types/film';
 
-type AppProps = MainScreenProps
+type AppProps = MainScreenProps & {
+  films: Film[]
+}
 
 function App(props: AppProps): JSX.Element {
   return (

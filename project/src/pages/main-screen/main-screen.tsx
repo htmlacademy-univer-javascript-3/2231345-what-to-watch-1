@@ -5,7 +5,9 @@ import {AppRoute} from '../../consts';
 import Logo from '../../components/logo/logo';
 import GenresList from '../../components/genres-list/genres-list';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {getFilms, setGenre} from '../../store/action';
+import {setFilms, setGenre} from '../../store/action';
+import ShowMoreButton from '../../components/show-more-button/show-more-button';
+import {useState} from 'react';
 
 export type MainScreenProps = {
   headerFilm: Film
@@ -14,7 +16,8 @@ export type MainScreenProps = {
 function MainScreen({headerFilm}: MainScreenProps) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
+  const {totalCount, films} = useAppSelector((state) => state);
+  const [page, setPage] = useState({number: 1, size: 8});
 
   return (
     <>
@@ -82,16 +85,20 @@ function MainScreen({headerFilm}: MainScreenProps) {
           {
             <GenresList onItemClick={(genre) => {
               dispatch(setGenre({genre}));
-              dispatch(getFilms());
+              dispatch(setFilms({page: 1, size: 8}));
             }}
             />
           }
 
-          <FilmsList films={useAppSelector((state) => state.films)}/>
+          <FilmsList films={films}/>
 
-          <div className="catalog__more">
-            <button className="catalog__button" type="button">Show more</button>
-          </div>
+          {page.number * page.size < totalCount &&
+            <ShowMoreButton onClick={() => {
+              dispatch(setFilms({page: page.number + 1, size: page.size}));
+              setPage({number: page.number + 1, size: page.size});
+            }}
+            />}
+
         </section>
 
         <footer className="page-footer">

@@ -1,24 +1,31 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {getFilms, setGenre} from './action';
+import {setFilms, setGenre} from './action';
 import {films} from '../mocks/films';
-import {Genre} from '../consts';
 
 const initialState = {
-  genre: Genre.All,
-  films: films
+  totalCount: films.length,
+  genre: '',
+  films: films.slice(0, 8)
 };
 
 export const reducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(getFilms, (state) => {
-      if (state.genre === Genre.All) {
-        state.films = films;
+    .addCase(setFilms, (state, action) => {
+      const {page, size} = action.payload;
+      const begin = (page - 1) * size;
+
+      if (!state.genre) {
+        state.films.push(...films.slice(begin, begin + size));
+        state.totalCount = films.length;
       } else {
-        state.films = films.filter((film) => film.genres.find((genre) => genre === state.genre));
+        const filteredFilms = films.filter((film) => film.genres.find((genre) => genre === state.genre));
+        state.films.push(...filteredFilms.slice(begin, begin + size));
+        state.totalCount = filteredFilms.length;
       }
     }
     )
     .addCase(setGenre, (state, action) => {
       state.genre = action.payload.genre;
+      state.films = [];
     });
 });
