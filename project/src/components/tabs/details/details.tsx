@@ -4,7 +4,7 @@ type DetailsProps = {
   film: Film
 }
 
-function Details({film} : DetailsProps) {
+function Details({film}: DetailsProps) {
   return (
     <div className="film-card__text film-card__row">
       <div className="film-card__text-col">
@@ -15,7 +15,7 @@ function Details({film} : DetailsProps) {
         <p className="film-card__details-item">
           <strong className="film-card__details-name">Starring</strong>
           <span className="film-card__details-value">
-            {film.starring.join(',\n')}
+            {film.starring.map((star) => (<p key={star}>{star}</p>))}
           </span>
         </p>
       </div>

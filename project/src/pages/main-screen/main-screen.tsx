@@ -5,8 +5,9 @@ import {AppRoute} from '../../consts';
 import Logo from '../../components/logo/logo';
 import GenresList from '../../components/genres-list/genres-list';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {getFilms, setGenre} from '../../store/action';
+import {setFilms, setGenre} from '../../store/action';
 import ShowMoreButton from '../../components/show-more-button/show-more-button';
+import {useState} from 'react';
 
 export type MainScreenProps = {
   headerFilm: Film
@@ -15,7 +16,8 @@ export type MainScreenProps = {
 function MainScreen({headerFilm}: MainScreenProps) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const {size, page, totalCount, films} = useAppSelector((state) => state);
+  const {totalCount, films} = useAppSelector((state) => state);
+  const [page, setPage] = useState({number: 1, size: 8});
 
   return (
     <>
@@ -83,16 +85,17 @@ function MainScreen({headerFilm}: MainScreenProps) {
           {
             <GenresList onItemClick={(genre) => {
               dispatch(setGenre({genre}));
-              dispatch(getFilms({page: 1, size: 8}));
+              dispatch(setFilms({page: 1, size: 8}));
             }}
             />
           }
 
           <FilmsList films={films}/>
 
-          {page * size < totalCount &&
+          {page.number * page.size < totalCount &&
             <ShowMoreButton onClick={() => {
-              dispatch(getFilms({page: page + 1, size: size}));
+              dispatch(setFilms({page: page.number + 1, size: page.size}));
+              setPage({number: page.number + 1, size: page.size});
             }}
             />}
 
