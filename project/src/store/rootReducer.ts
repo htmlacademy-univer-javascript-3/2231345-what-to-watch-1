@@ -1,6 +1,5 @@
 import {createReducer} from '@reduxjs/toolkit';
 import {setFilms, setGenre} from './action';
-import {films} from '../mocks/films';
 
 const initialState = {
   totalCount: films.length,
@@ -8,7 +7,7 @@ const initialState = {
   films: films.slice(0, 8)
 };
 
-export const reducer = createReducer(initialState, (builder) => {
+export const rootReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(setFilms, (state, action) => {
       const {page, size} = action.payload;
