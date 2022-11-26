@@ -1,5 +1,5 @@
 import {Film} from '../../types/film';
-import FilmsList from '../../components/films-list';
+import FilmsList from '../../components/films-list/films-list';
 import {Link} from 'react-router-dom';
 import {AppRoute} from '../../consts';
 
