@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './components/app/app';
+import App from './components/services/app';
 import {Provider} from 'react-redux';
 import {store} from './store';
-import {fetchFilmsAction} from './store/api-actions/api-actions';
+import {checkAuthAction, fetchFilmsAction} from './store/api-actions/api-actions';
 
 store.dispatch(fetchFilmsAction());
+store.dispatch(checkAuthAction());
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,

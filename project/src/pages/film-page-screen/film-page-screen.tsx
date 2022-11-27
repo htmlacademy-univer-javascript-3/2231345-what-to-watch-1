@@ -1,19 +1,18 @@
 import Logo from '../../components/logo/logo';
 import {Link, useParams} from 'react-router-dom';
-import {AppRoute} from '../../consts';
 import Tabs from '../../components/tabs/tabs';
 import {useAppSelector} from '../../hooks';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
+import {UserBlock} from '../../components/user-block/user-block';
 
 function FilmPageScreen(): JSX.Element {
   const {id} = useParams();
   const filmId = Number(id);
   const film = useAppSelector((state) => state.films.find((f) => f.id === filmId));
 
-  if (!film){
+  if (!film) {
     return <NotFoundScreen/>;
-  }
-  else {
+  } else {
     return (
       <>
         <section className="film-card film-card--full">
@@ -25,19 +24,8 @@ function FilmPageScreen(): JSX.Element {
             <h1 className="visually-hidden">WTW</h1>
 
             <header className="page-header film-card__head">
-
               <Logo isLight={false}/>
-
-              <ul className="user-block">
-                <li className="user-block__item">
-                  <div className="user-block__avatar">
-                    <img src="img/avatar.jpg" alt="User avatar" width="63" height="63"/>
-                  </div>
-                </li>
-                <li className="user-block__item">
-                  <Link to={AppRoute.SignIn} className="user-block__link">Sign out</Link>
-                </li>
-              </ul>
+              <UserBlock/>
             </header>
 
             <div className="film-card__wrap">

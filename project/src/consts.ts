@@ -8,6 +8,7 @@ export enum AppRoute {
   Main = '/',
   SignIn = '/login',
   MyList = '/mylist',
+  SignOut = '/logout'
 }
 
 export enum FilmPageTab {
