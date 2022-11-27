@@ -1,15 +1,13 @@
 import {Link} from 'react-router-dom';
 import {useState} from 'react';
 import VideoPlayer from '../video-player/video-player';
+import {Film} from '../../types/film';
 
 type FilmCardProps = {
-  id: string
-  poster: string
-  name: string
-  source: string
+  film: Film
 }
 
-function FilmCard({id, poster, name, source}: FilmCardProps): JSX.Element {
+function FilmCard({film}: FilmCardProps): JSX.Element {
   const [isPlaying, setIsPlaying] = useState(false);
   const [timeoutId, setTimeoutId] = useState<number | null>(null);
 
@@ -29,15 +27,15 @@ function FilmCard({id, poster, name, source}: FilmCardProps): JSX.Element {
       className="small-film-card catalog__films-card"
     >
       {isPlaying
-        ? <VideoPlayer height={175} width={280} poster={poster} src={source} muted/>
+        ? <VideoPlayer height={175} width={280} poster={film.posterImage} src={film.previewVideoLink} muted/>
         :
         <>
           <div className="small-film-card__image">
-            <img src={poster} alt={name} width="280" height="175"/>
+            <img src={film.posterImage} alt={film.name} width="280" height="175"/>
 
           </div>
           <h3 className="small-film-card__title">
-            <Link className="small-film-card__link" to={`/films/${id}`}>{name}</Link>
+            <Link className="small-film-card__link" to={`/films/${film.id}`}>{film.name}</Link>
           </h3>
         </>}
     </article>

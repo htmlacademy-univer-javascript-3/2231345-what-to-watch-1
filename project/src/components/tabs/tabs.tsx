@@ -21,7 +21,7 @@ function Tabs({film}: TabsProps) {
   const getCurrentTab = (tab: string) => {
     switch (tab) {
       case FilmPageTab.Reviews:
-        return <Reviews reviews={[]}/>;
+        return <Reviews comments={[]}/>;
       case FilmPageTab.Details:
         return <Details film={film}/>;
       case FilmPageTab.Overview:

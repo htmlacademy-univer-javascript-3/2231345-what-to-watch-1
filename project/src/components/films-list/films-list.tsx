@@ -8,7 +8,7 @@ type FilmsListProps = {
 function FilmsList({films}: FilmsListProps) {
   return (
     <div className="catalog__films-list">
-      {films.map((film) => <FilmCard key={film.id} {...film}/>)}
+      {films.map((film) => <FilmCard key={film.id} film={film}/>)}
     </div>
   );
 }

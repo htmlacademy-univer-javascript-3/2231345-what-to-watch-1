@@ -1,30 +1,26 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {setFilms, setGenre} from './action';
+import {loadFilms, setDataLoadingStatus} from './action';
+import {Films} from '../types/film';
 
-const initialState = {
-  totalCount: films.length,
-  genre: '',
-  films: films.slice(0, 8)
+
+type InitialState = {
+  films: Films,
+  isDataLoading: boolean,
+  error: string | null
+};
+
+const initialState: InitialState = {
+  films: <Films>[],
+  isDataLoading: false,
+  error: null
 };
 
 export const rootReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(setFilms, (state, action) => {
-      const {page, size} = action.payload;
-      const begin = (page - 1) * size;
-
-      if (!state.genre) {
-        state.films.push(...films.slice(begin, begin + size));
-        state.totalCount = films.length;
-      } else {
-        const filteredFilms = films.filter((film) => film.genres.find((genre) => genre === state.genre));
-        state.films.push(...filteredFilms.slice(begin, begin + size));
-        state.totalCount = filteredFilms.length;
-      }
-    }
-    )
-    .addCase(setGenre, (state, action) => {
-      state.genre = action.payload.genre;
-      state.films = [];
+    .addCase(loadFilms, (state, action) => {
+      state.films = action.payload;
+    })
+    .addCase(setDataLoadingStatus, (state, action) => {
+      state.isDataLoading = action.payload;
     });
 });

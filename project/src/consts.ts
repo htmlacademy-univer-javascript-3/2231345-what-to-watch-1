@@ -10,9 +10,18 @@ export enum AppRoute {
   MyList = '/mylist',
 }
 
-
 export enum FilmPageTab {
   Overview = 'Overview',
   Details = 'Details',
   Reviews = 'Reviews'
+}
+
+export enum APIRoute {
+  Films = 'films',
+  Similar = 'similar',
+  Promo = 'promo',
+  Favorites = 'favorite',
+  Comments = 'comments',
+  Login = 'login',
+  Logout = 'logout'
 }

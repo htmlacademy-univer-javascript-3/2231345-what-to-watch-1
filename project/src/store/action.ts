@@ -1,4 +1,5 @@
 import {createAction} from '@reduxjs/toolkit';
+import {Films} from '../types/film';
 
-export const setFilms = createAction<{page: number, size: number}>('films/setFilms');
-export const setGenre = createAction<{genre: string}>('films/setGenre');
+export const setDataLoadingStatus = createAction<boolean>('data/isDataLoadingStatus');
+export const loadFilms = createAction<Films>('data/loadFilms');

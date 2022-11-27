@@ -1,29 +1,37 @@
-import {Film} from '../../types/film';
+import {Film, Films} from '../../types/film';
 import FilmsList from '../../components/films-list/films-list';
 import {Link, useNavigate} from 'react-router-dom';
 import {AppRoute} from '../../consts';
 import Logo from '../../components/logo/logo';
 import GenresList from '../../components/genres-list/genres-list';
-import {useAppDispatch, useAppSelector} from '../../hooks';
-import {setFilms, setGenre} from '../../store/action';
+import {useAppSelector} from '../../hooks';
 import ShowMoreButton from '../../components/show-more-button/show-more-button';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
-export type MainScreenProps = {
-  headerFilm: Film
-}
+function MainScreen() {
+  const pageSize = 8;
 
-function MainScreen({headerFilm}: MainScreenProps) {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const {totalCount, films} = useAppSelector((state) => state);
-  const [page, setPage] = useState({number: 1, size: 8});
+  const {films} = useAppSelector((state) => state);
+  const [page, setPage] = useState({count: 0, totalCount: 0, films: [] as Films});
+  const [currentGenre, setCurrentGenre] = useState<string | null>(null);
+  const [headerFilm,] = useState<Film>(films[0]);
+
+  const filterFilms = (count: number, genre: string | null) => {
+    const filteredFilms = films.filter((film) => !genre || film.genre === genre);
+    return {currentFilms: filteredFilms.slice(0, count), totalCount: filteredFilms.length};
+  };
+
+  useEffect(() => {
+    const {currentFilms, totalCount} = filterFilms(pageSize, currentGenre);
+    setPage({count: 8, totalCount: totalCount, films: currentFilms});
+  }, [currentGenre]);
 
   return (
     <>
       <section className="film-card">
         <div className="film-card__bg">
-          <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel"/>
+          <img src={headerFilm.backgroundImage} alt={headerFilm.name}/>
         </div>
 
         <h1 className="visually-hidden">WTW</h1>
@@ -46,14 +54,14 @@ function MainScreen({headerFilm}: MainScreenProps) {
         <div className="film-card__wrap">
           <div className="film-card__info">
             <div className="film-card__poster">
-              <img src={headerFilm.poster} alt={`${headerFilm.name} poster`} width="218" height="327"/>
+              <img src={headerFilm.posterImage} alt={`${headerFilm.name} poster`} width="218" height="327"/>
             </div>
 
             <div className="film-card__desc">
               <h2 className="film-card__title">{headerFilm.name}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">{headerFilm.genres.join(' ')}</span>
-                <span className="film-card__year">{headerFilm.releaseYear}</span>
+                <span className="film-card__genre">{headerFilm.genre}</span>
+                <span className="film-card__year">{headerFilm.released}</span>
               </p>
 
               <div className="film-card__buttons">
@@ -82,20 +90,19 @@ function MainScreen({headerFilm}: MainScreenProps) {
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-          {
-            <GenresList onItemClick={(genre) => {
-              dispatch(setGenre({genre}));
-              dispatch(setFilms({page: 1, size: 8}));
-            }}
-            />
-          }
 
-          <FilmsList films={films}/>
+          <GenresList onItemClick={(genre) => {
+            setCurrentGenre(genre);
+          }}
+          />
 
-          {page.number * page.size < totalCount &&
+
+          <FilmsList films={page.films}/>
+
+          {page.count < page.totalCount &&
             <ShowMoreButton onClick={() => {
-              dispatch(setFilms({page: page.number + 1, size: page.size}));
-              setPage({number: page.number + 1, size: page.size});
+              const {currentFilms, totalCount} = filterFilms(page.count + pageSize, currentGenre);
+              setPage({count: page.count + pageSize, totalCount: totalCount, films: currentFilms});
             }}
             />}
 
