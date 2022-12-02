@@ -1,4 +1,4 @@
-import MainScreen, {MainScreenProps} from '../../pages/main-screen/main-screen';
+import MainScreen from '../../pages/main-screen/main-screen';
 import {BrowserRouter, Outlet, Route, Routes} from 'react-router-dom';
 import SignInScreen from '../../pages/sign-in-screen/sign-in-screen';
 import MyListScreen from '../../pages/my-list-screen/my-list-screen';
@@ -9,32 +9,37 @@ import FilmPageScreen from '../../pages/film-page-screen/film-page-screen';
 import AddReviewScreen from '../../pages/add-review-screen/add-review-screen';
 import PlayerScreen from '../../pages/player-screen/player-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
-import {Film} from '../../types/film';
+import {useAppSelector} from '../../hooks';
+import LoadingScreen from '../../pages/loading-screen/loading-screen';
 
-type AppProps = MainScreenProps & {
-  films: Film[]
-}
+function App(): JSX.Element {
+  const {isDataLoading} = useAppSelector((state) => state);
 
-function App(props: AppProps): JSX.Element {
+  if (isDataLoading) {
+    return (
+      <LoadingScreen/>
+    );
+  }
+
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route path='/'>
-            <Route index element={<MainScreen {...props}/>}/>
+            <Route index element={<MainScreen/>}/>
             <Route path='login' element={<SignInScreen/>}/>
             <Route path='mylist' element=
               {
                 <PrivateRoute authorizationStatus={AuthorizationStatus.Auth}>
-                  <MyListScreen {...props}/>
+                  <MyListScreen/>
                 </PrivateRoute>
               }
             />
             <Route path='films/:id'>
-              <Route index element={<FilmPageScreen film={props.films[0]}/>}/>
-              <Route path='review' element={<AddReviewScreen {...props.films[0]}/>}/>
+              <Route index element={<FilmPageScreen/>}/>
+              <Route path='review' element={<AddReviewScreen/>}/>
             </Route>
-            <Route path='player/:id' element={<PlayerScreen {...props.films[0]}/>}/>
+            <Route path='player/:id' element={<PlayerScreen/>}/>
           </Route>
           <Route path='*' element={<NotFoundScreen/>}/>
 

@@ -1,15 +1,15 @@
-import {Review} from '../../../types/review';
+import {Comment} from '../../../types/comment';
 import ReviewComponent from '../../review/review';
 
 type ReviewsProps = {
-  reviews: Review[]
+  comments: Comment[]
 }
 
-function Reviews({reviews}: ReviewsProps) {
+function Reviews({comments}: ReviewsProps) {
   return (
     <div className="film-card__reviews film-card__row">
       <div className="film-card__reviews-col">
-        {reviews.map((review) => <ReviewComponent key={review.id} {...review}/>)}
+        {comments.map((comment) => <ReviewComponent key={comment.id} comment={comment}/>)}
       </div>
     </div>
   );

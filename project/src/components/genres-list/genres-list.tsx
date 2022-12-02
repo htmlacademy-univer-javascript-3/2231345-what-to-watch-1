@@ -2,23 +2,25 @@ import {useAppSelector} from '../../hooks';
 
 
 type GenresListProps = {
-  onItemClick: (genre: string) => void
+  onItemClick: (genre: string | null) => void
 }
+
 
 export default function GenresList({onItemClick}: GenresListProps) {
   const films = useAppSelector((state) => state.films);
-  const genres = new Set<string>();
+  const genres = new Map<string, string | null>();
   for (const film of films) {
-    film.genres.forEach((genre) => genres.add(genre));
+    genres.set(film.genre, film.genre);
   }
-
+  const sortedGenres = [...genres].sort((fGenre, sGenre) => fGenre[0] < sGenre[0] ? -1 : 1);
+  sortedGenres.unshift(['All', null]);
   return (
     <ul className="catalog__genres-list">
       {
-        [...genres].sort().map((genre) =>
+        sortedGenres.map((genre) =>
           (
-            <li key={genre} className="catalog__genres-item catalog__genres-item--active">
-              <button onClick={() => onItemClick(genre)} className="catalog__genres-link">{genre}</button>
+            <li key={genre[0]} className="catalog__genres-item catalog__genres-item--active">
+              <button onClick={() => onItemClick(genre[1])} className="catalog__genres-link">{genre[0]}</button>
             </li>
           )
         )
