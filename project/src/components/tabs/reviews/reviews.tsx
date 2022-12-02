@@ -1,11 +1,8 @@
-import {Comment} from '../../../types/comment';
 import ReviewComponent from '../../review/review';
+import {useAppSelector} from '../../../hooks';
 
-type ReviewsProps = {
-  comments: Comment[]
-}
-
-function Reviews({comments}: ReviewsProps) {
+function Reviews() {
+  const {comments} = useAppSelector((state) => state);
   return (
     <div className="film-card__reviews film-card__row">
       <div className="film-card__reviews-col">

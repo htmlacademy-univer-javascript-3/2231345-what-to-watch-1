@@ -1,21 +1,24 @@
-import {Film} from '../../../types/film';
+import {useAppSelector} from '../../../hooks';
+import NotFoundScreen from '../../../pages/not-found-screen/not-found-screen';
 
-type DetailsProps = {
-  film: Film
-}
+function Details() {
+  const {currentFilm} = useAppSelector((state) => state);
 
-function Details({film}: DetailsProps) {
+  if (!currentFilm) {
+    return <NotFoundScreen/>;
+  }
+
   return (
     <div className="film-card__text film-card__row">
       <div className="film-card__text-col">
         <p className="film-card__details-item">
           <strong className="film-card__details-name">Director</strong>
-          <span className="film-card__details-value">{film.director}</span>
+          <span className="film-card__details-value">{currentFilm.director}</span>
         </p>
         <p className="film-card__details-item">
           <strong className="film-card__details-name">Starring</strong>
           <span className="film-card__details-value">
-            {film.starring.map((star) => (<p key={star}>{star}</p>))}
+            {currentFilm.starring.map((star) => (<p key={star}>{star}</p>))}
           </span>
         </p>
       </div>
@@ -27,11 +30,11 @@ function Details({film}: DetailsProps) {
         </p>
         <p className="film-card__details-item">
           <strong className="film-card__details-name">Genre</strong>
-          <span className="film-card__details-value">{film.genre}</span>
+          <span className="film-card__details-value">{currentFilm.genre}</span>
         </p>
         <p className="film-card__details-item">
           <strong className="film-card__details-name">Released</strong>
-          <span className="film-card__details-value">{film.released}</span>
+          <span className="film-card__details-value">{currentFilm.released}</span>
         </p>
       </div>
     </div>
