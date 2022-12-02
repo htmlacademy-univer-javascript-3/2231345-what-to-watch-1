@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom/client';
 import App from './components/services/app';
 import {Provider} from 'react-redux';
 import {store} from './store';
-import {checkAuthAction, fetchFilmsAction} from './store/api-actions/api-actions';
+import {checkAuthAction, fetchFilmsAction, fetchPromoFilmAction} from './store/api-actions/api-actions';
 
 store.dispatch(fetchFilmsAction());
+store.dispatch(fetchPromoFilmAction());
 store.dispatch(checkAuthAction());
 
 const root = ReactDOM.createRoot(

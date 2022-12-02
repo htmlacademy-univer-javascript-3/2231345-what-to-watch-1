@@ -1,4 +1,4 @@
-import {Film, Films} from '../../types/film';
+import {Films} from '../../types/film';
 import FilmsList from '../../components/films-list/films-list';
 import {useNavigate} from 'react-router-dom';
 import Logo from '../../components/logo/logo';
@@ -7,15 +7,15 @@ import {useAppSelector} from '../../hooks';
 import ShowMoreButton from '../../components/show-more-button/show-more-button';
 import {useEffect, useState} from 'react';
 import {UserBlock} from '../../components/user-block/user-block';
+import NotFoundScreen from '../not-found-screen/not-found-screen';
 
 function MainScreen() {
   const pageSize = 8;
 
   const navigate = useNavigate();
-  const {films} = useAppSelector((state) => state);
+  const {films, promoFilm} = useAppSelector((state) => state);
   const [page, setPage] = useState({count: 0, totalCount: 0, films: [] as Films});
   const [currentGenre, setCurrentGenre] = useState<string | null>(null);
-  const [headerFilm,] = useState<Film>(films[0]);
 
   const filterFilms = (count: number, genre: string | null) => {
     const filteredFilms = films.filter((film) => !genre || film.genre === genre);
@@ -25,13 +25,16 @@ function MainScreen() {
   useEffect(() => {
     const {currentFilms, totalCount} = filterFilms(pageSize, currentGenre);
     setPage({count: 8, totalCount: totalCount, films: currentFilms});
-  }, [currentGenre]);
+  }, [currentGenre, films]);
+
+  if (!promoFilm)
+  {return <NotFoundScreen/>;}
 
   return (
     <>
       <section className="film-card">
         <div className="film-card__bg">
-          <img src={headerFilm.backgroundImage} alt={headerFilm.name}/>
+          <img src={promoFilm.backgroundImage} alt={promoFilm.name}/>
         </div>
 
         <h1 className="visually-hidden">WTW</h1>
@@ -44,19 +47,19 @@ function MainScreen() {
         <div className="film-card__wrap">
           <div className="film-card__info">
             <div className="film-card__poster">
-              <img src={headerFilm.posterImage} alt={`${headerFilm.name} poster`} width="218" height="327"/>
+              <img src={promoFilm.posterImage} alt={`${promoFilm.name} poster`} width="218" height="327"/>
             </div>
 
             <div className="film-card__desc">
-              <h2 className="film-card__title">{headerFilm.name}</h2>
+              <h2 className="film-card__title">{promoFilm.name}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">{headerFilm.genre}</span>
-                <span className="film-card__year">{headerFilm.released}</span>
+                <span className="film-card__genre">{promoFilm.genre}</span>
+                <span className="film-card__year">{promoFilm.released}</span>
               </p>
 
               <div className="film-card__buttons">
                 <button className="btn btn--play film-card__button" type="button"
-                  onClick={() => navigate(`/player/${headerFilm.id}`)}
+                  onClick={() => navigate(`/player/${promoFilm.id}`)}
                 >
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>

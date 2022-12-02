@@ -1,9 +1,9 @@
 import Logo from '../../components/logo/logo';
 import {Link, useParams} from 'react-router-dom';
 import CommentForm from '../../components/comment-form/comment-form';
-import {AppRoute} from '../../consts';
 import {useAppSelector} from '../../hooks';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
+import {UserBlock} from '../../components/user-block/user-block';
 
 function AddReviewScreen(): JSX.Element {
   const {id} = useParams();
@@ -37,16 +37,7 @@ function AddReviewScreen(): JSX.Element {
               </ul>
             </nav>
 
-            <ul className="user-block">
-              <li className="user-block__item">
-                <div className="user-block__avatar">
-                  <img src="img/avatar.jpg" alt="User avatar" width="63" height="63"/>
-                </div>
-              </li>
-              <li className="user-block__item">
-                <Link to={AppRoute.SignIn} className="user-block__link">Sign out</Link>
-              </li>
-            </ul>
+            <UserBlock/>
           </header>
 
           <div className="film-card__poster film-card__poster--small">

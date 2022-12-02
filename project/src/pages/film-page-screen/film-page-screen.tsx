@@ -1,130 +1,111 @@
 import Logo from '../../components/logo/logo';
 import {Link, useParams} from 'react-router-dom';
 import Tabs from '../../components/tabs/tabs';
-import {useAppSelector} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import {UserBlock} from '../../components/user-block/user-block';
+import LoadingScreen from '../loading-screen/loading-screen';
+import FilmsList from '../../components/films-list/films-list';
+import {useEffect} from 'react';
+import {fetchFilmWithExtrasAction} from '../../store/api-actions/api-actions';
+import {AuthorizationStatus} from '../../consts';
 
 function FilmPageScreen(): JSX.Element {
   const {id} = useParams();
   const filmId = Number(id);
-  const film = useAppSelector((state) => state.films.find((f) => f.id === filmId));
+  const {currentFilm, isDataLoading, similarFilms, authorizationStatus} = useAppSelector((state) => state);
+  const dispatch = useAppDispatch();
 
-  if (!film) {
+  useEffect(() => {
+    if (!currentFilm || currentFilm.id !== filmId) {
+      dispatch(fetchFilmWithExtrasAction(filmId));
+    }
+  }, []);
+
+  if (isDataLoading) {
+    return <LoadingScreen/>;
+  }
+
+  if (!currentFilm) {
     return <NotFoundScreen/>;
-  } else {
-    return (
-      <>
-        <section className="film-card film-card--full">
-          <div className="film-card__hero">
-            <div className="film-card__bg">
-              <img src={film.backgroundImage} alt={film.name}/>
-            </div>
+  }
 
-            <h1 className="visually-hidden">WTW</h1>
+  return (
+    <>
+      <section className="film-card film-card--full">
+        <div className="film-card__hero">
+          <div className="film-card__bg">
+            <img src={currentFilm.backgroundImage} alt={currentFilm.name}/>
+          </div>
 
-            <header className="page-header film-card__head">
-              <Logo isLight={false}/>
-              <UserBlock/>
-            </header>
+          <h1 className="visually-hidden">WTW</h1>
 
-            <div className="film-card__wrap">
-              <div className="film-card__desc">
-                <h2 className="film-card__title">{film.name}</h2>
-                <p className="film-card__meta">
-                  <span className="film-card__genre">{film.genre}</span>
-                  <span className="film-card__year">{film.released}</span>
-                </p>
+          <header className="page-header film-card__head">
+            <Logo isLight={false}/>
+            <UserBlock/>
+          </header>
 
-                <div className="film-card__buttons">
-                  <button className="btn btn--play film-card__button" type="button">
-                    <svg viewBox="0 0 19 19" width="19" height="19">
-                      <use xlinkHref="#play-s"></use>
-                    </svg>
-                    <span>Play</span>
-                  </button>
-                  <button className="btn btn--list film-card__button" type="button">
-                    <svg viewBox="0 0 19 20" width="19" height="20">
-                      <use xlinkHref="#add"></use>
-                    </svg>
-                    <span>My list</span>
-                    <span className="film-card__count">9</span>
-                  </button>
-                  <Link to={`/films/${film.id}/review`} className="btn film-card__button">Add review</Link>
-                </div>
+          <div className="film-card__wrap">
+            <div className="film-card__desc">
+              <h2 className="film-card__title">{currentFilm.name}</h2>
+              <p className="film-card__meta">
+                <span className="film-card__genre">{currentFilm.genre}</span>
+                <span className="film-card__year">{currentFilm.released}</span>
+              </p>
+
+              <div className="film-card__buttons">
+                <button className="btn btn--play film-card__button" type="button">
+                  <svg viewBox="0 0 19 19" width="19" height="19">
+                    <use xlinkHref="#play-s"></use>
+                  </svg>
+                  <span>Play</span>
+                </button>
+                <button className="btn btn--list film-card__button" type="button">
+                  <svg viewBox="0 0 19 20" width="19" height="20">
+                    <use xlinkHref="#add"></use>
+                  </svg>
+                  <span>My list</span>
+                  <span className="film-card__count">9</span>
+                </button>
+                {
+                  authorizationStatus === AuthorizationStatus.Auth &&
+                  <Link to={`/films/${currentFilm.id}/review`} className="btn film-card__button">Add review</Link>
+                }
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="film-card__wrap film-card__translate-top">
-            <div className="film-card__info">
-              <div className="film-card__poster film-card__poster--big">
-                <img src={film.posterImage} alt={`${film.name} poster`} width="218" height="327"/>
-              </div>
-
-              <Tabs film={film}/>
+        <div className="film-card__wrap film-card__translate-top">
+          <div className="film-card__info">
+            <div className="film-card__poster film-card__poster--big">
+              <img src={currentFilm.posterImage} alt={`${currentFilm.name} poster`} width="218" height="327"/>
             </div>
+
+            <Tabs/>
+
           </div>
+        </div>
+      </section>
+
+      <div className="page-content">
+        <section className="catalog catalog--like-this">
+          <h2 className="catalog__title">More like this</h2>
+
+          <FilmsList films={similarFilms}/>
+
         </section>
 
-        <div className="page-content">
-          <section className="catalog catalog--like-this">
-            <h2 className="catalog__title">More like this</h2>
+        <footer className="page-footer">
+          <Logo isLight/>
 
-            <div className="catalog__films-list">
-              <article className="small-film-card catalog__films-card">
-                <div className="small-film-card__image">
-                  <img src="img/fantastic-beasts-the-crimes-of-grindelwald.jpg"
-                    alt="Fantastic Beasts: The Crimes of Grindelwald" width="280" height="175"
-                  />
-                </div>
-                <h3 className="small-film-card__title">
-                  <a className="small-film-card__link" href="film-page.html">Fantastic Beasts: The Crimes of
-                    Grindelwald
-                  </a>
-                </h3>
-              </article>
-
-              <article className="small-film-card catalog__films-card">
-                <div className="small-film-card__image">
-                  <img src="img/bohemian-rhapsody.jpg" alt="Bohemian Rhapsody" width="280" height="175"/>
-                </div>
-                <h3 className="small-film-card__title">
-                  <a className="small-film-card__link" href="film-page.html">Bohemian Rhapsody</a>
-                </h3>
-              </article>
-
-              <article className="small-film-card catalog__films-card">
-                <div className="small-film-card__image">
-                  <img src="img/macbeth.jpg" alt="Macbeth" width="280" height="175"/>
-                </div>
-                <h3 className="small-film-card__title">
-                  <a className="small-film-card__link" href="film-page.html">Macbeth</a>
-                </h3>
-              </article>
-
-              <article className="small-film-card catalog__films-card">
-                <div className="small-film-card__image">
-                  <img src="img/aviator.jpg" alt="Aviator" width="280" height="175"/>
-                </div>
-                <h3 className="small-film-card__title">
-                  <a className="small-film-card__link" href="film-page.html">Aviator</a>
-                </h3>
-              </article>
-            </div>
-          </section>
-
-          <footer className="page-footer">
-            <Logo isLight/>
-
-            <div className="copyright">
-              <p>© 2019 What to watch Ltd.</p>
-            </div>
-          </footer>
-        </div>
-      </>
-    );
-  }
+          <div className="copyright">
+            <p>© 2019 What to watch Ltd.</p>
+          </div>
+        </footer>
+      </div>
+    </>
+  );
 }
 
 export default FilmPageScreen;

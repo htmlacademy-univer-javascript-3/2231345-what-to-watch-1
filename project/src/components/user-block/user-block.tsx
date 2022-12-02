@@ -2,10 +2,11 @@ import {Link} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus} from '../../consts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {logoutAction} from '../../store/api-actions/api-actions';
+import {getAvatarUri} from '../services/user-data';
 
 export function UserBlock() {
   const dispatch = useAppDispatch();
-  const {authorizationStatus, user} = useAppSelector((state) => state);
+  const {authorizationStatus} = useAppSelector((state) => state);
   return (
     <ul className="user-block">
       {
@@ -14,7 +15,7 @@ export function UserBlock() {
           <>
             <li className="user-block__item">
               <div className="user-block__avatar">
-                <img src={user!.avatarUrl} alt="User avatar" width="63" height="63"/>
+                <img src={getAvatarUri()} alt="User avatar" width="63" height="63"/>
               </div>
             </li>
             <li className="user-block__item">
