@@ -13,9 +13,9 @@ import {useAppSelector} from '../../hooks';
 import LoadingScreen from '../../pages/loading-screen/loading-screen';
 
 function App(): JSX.Element {
-  const {isDataLoading} = useAppSelector((state) => state);
+  const {authorizationStatus, isDataLoading} = useAppSelector((state) => state);
 
-  if (isDataLoading) {
+  if (authorizationStatus === AuthorizationStatus.Unknown || isDataLoading) {
     return (
       <LoadingScreen/>
     );
@@ -30,7 +30,7 @@ function App(): JSX.Element {
             <Route path='login' element={<SignInScreen/>}/>
             <Route path='mylist' element=
               {
-                <PrivateRoute authorizationStatus={AuthorizationStatus.Auth}>
+                <PrivateRoute>
                   <MyListScreen/>
                 </PrivateRoute>
               }
@@ -42,7 +42,6 @@ function App(): JSX.Element {
             <Route path='player/:id' element={<PlayerScreen/>}/>
           </Route>
           <Route path='*' element={<NotFoundScreen/>}/>
-
         </Routes>
       </BrowserRouter>
       <Outlet/>

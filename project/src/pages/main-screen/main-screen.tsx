@@ -1,12 +1,12 @@
 import {Film, Films} from '../../types/film';
 import FilmsList from '../../components/films-list/films-list';
-import {Link, useNavigate} from 'react-router-dom';
-import {AppRoute} from '../../consts';
+import {useNavigate} from 'react-router-dom';
 import Logo from '../../components/logo/logo';
 import GenresList from '../../components/genres-list/genres-list';
 import {useAppSelector} from '../../hooks';
 import ShowMoreButton from '../../components/show-more-button/show-more-button';
 import {useEffect, useState} from 'react';
+import {UserBlock} from '../../components/user-block/user-block';
 
 function MainScreen() {
   const pageSize = 8;
@@ -38,17 +38,7 @@ function MainScreen() {
 
         <header className="page-header film-card__head">
           <Logo isLight={false}/>
-
-          <ul className="user-block">
-            <li className="user-block__item">
-              <div className="user-block__avatar">
-                <img src="img/avatar.jpg" alt="User avatar" width="63" height="63"/>
-              </div>
-            </li>
-            <li className="user-block__item">
-              <Link to={AppRoute.SignIn} className="user-block__link">Sign out</Link>
-            </li>
-          </ul>
+          <UserBlock/>
         </header>
 
         <div className="film-card__wrap">
