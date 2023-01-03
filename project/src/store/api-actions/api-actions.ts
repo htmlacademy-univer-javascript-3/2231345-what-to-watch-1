@@ -4,7 +4,7 @@ import {AppDispatch, State} from '../../types/state';
 import {Film, Films} from '../../types/film';
 import {APIRoute, AuthorizationStatus} from '../../consts';
 import {
-  loadComments,
+  loadComments, loadFavoriteFilms,
   loadFilm,
   loadFilms,
   loadPromoFilm,
@@ -16,6 +16,7 @@ import {AuthData} from '../../types/auth-data';
 import {Comments} from '../../types/comment';
 import {dropUser, saveUser} from '../../components/services/user-data';
 import {setAuthorizationStatus} from '../authentication/action';
+import {PostIsFavorite} from '../../types/post-is-favorite';
 
 
 export const fetchFilmsAction = createAsyncThunk<Films, undefined, {
@@ -118,5 +119,31 @@ export const postCommentAction = createAsyncThunk<Comments, { comment: string, r
     comment: _arg.comment,
     rating: _arg.rating
   })
+);
+
+export const postIsFavoriteAction = createAsyncThunk<Film, PostIsFavorite, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>(
+  'data/postIsFavorite',
+  async (_arg, {dispatch, extra: api}) => {
+    const {data} = await api.post<Film>(`${APIRoute.Favorite}/${_arg.filmId}/${_arg.isFavorite ? 1 : 0}`);
+    dispatch(_arg.action(data));
+    return data;
+  }
+);
+
+export const fetchFavoriteFilmsAction = createAsyncThunk<Films, undefined, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>(
+  'data/getFavoriteFilms',
+  async (_arg, {dispatch, extra: api}) => {
+    const {data} = await api.get<Films>(`${APIRoute.Favorite}`);
+    dispatch(loadFavoriteFilms(data));
+    return data;
+  }
 );
 

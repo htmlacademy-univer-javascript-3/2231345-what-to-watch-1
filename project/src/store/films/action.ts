@@ -8,3 +8,4 @@ export const loadPromoFilm = createAction<Film>('films/loadPromoFilm');
 export const loadFilm = createAction<Film>('films/loadFilm');
 export const loadComments = createAction<Comments>('films/loadComments');
 export const loadSimilarFilms = createAction<Films>('films/loadSimilarFilms');
+export const loadFavoriteFilms = createAction<Films>('films/loadFavoriteFilms');

@@ -1,5 +1,13 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {loadComments, loadFilm, loadFilms, loadPromoFilm, loadSimilarFilms, setDataLoadingStatus} from './action';
+import {
+  loadComments,
+  loadFavoriteFilms,
+  loadFilm,
+  loadFilms,
+  loadPromoFilm,
+  loadSimilarFilms,
+  setDataLoadingStatus
+} from './action';
 import {Film, Films} from '../../types/film';
 import {Comments} from '../../types/comment';
 
@@ -10,7 +18,8 @@ export type FilmsState = {
   error: string | null,
   currentFilm: Film | null,
   comments: Comments,
-  similarFilms: Films
+  similarFilms: Films,
+  favoriteFilms: Films
 };
 
 const initialState: FilmsState = {
@@ -20,7 +29,8 @@ const initialState: FilmsState = {
   error: null,
   comments: [],
   currentFilm: null,
-  similarFilms: []
+  similarFilms: [],
+  favoriteFilms: []
 };
 
 export const filmReducer = createReducer(initialState, (builder) => {
@@ -42,5 +52,8 @@ export const filmReducer = createReducer(initialState, (builder) => {
     })
     .addCase(loadFilm, (state, action) => {
       state.currentFilm = action.payload;
+    })
+    .addCase(loadFavoriteFilms, (state, action) => {
+      state.favoriteFilms = action.payload;
     });
 });
