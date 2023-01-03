@@ -8,8 +8,9 @@ function Tabs() {
   const [currentTab, setCurrentTab] = useState<FilmPageTab>(FilmPageTab.Overview);
 
   const setTab = (tab: FilmPageTab) => {
-    if (currentTab === tab)
-    {return;}
+    if (currentTab === tab) {
+      return;
+    }
     setCurrentTab(tab);
   };
 

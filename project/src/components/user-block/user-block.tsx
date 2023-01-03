@@ -6,7 +6,7 @@ import {getAvatarUri} from '../services/user-data';
 
 export function UserBlock() {
   const dispatch = useAppDispatch();
-  const {authorizationStatus} = useAppSelector((state) => state);
+  const authorizationStatus = useAppSelector<AuthorizationStatus>((state) => state.authorizationState.authorizationStatus);
   return (
     <ul className="user-block">
       {

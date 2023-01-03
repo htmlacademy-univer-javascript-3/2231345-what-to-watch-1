@@ -2,16 +2,16 @@ import {Link, useParams} from 'react-router-dom';
 import {AppRoute} from '../../consts';
 import {useAppSelector} from '../../hooks';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
+import {Film} from '../../types/film';
 
 function PlayerScreen(): JSX.Element {
   const {id} = useParams();
   const filmId = Number(id);
-  const film = useAppSelector((state) => state.films.find((f) => f.id === filmId));
+  const film = useAppSelector((state) => state.filmsState.films.find((f: Film) => f.id === filmId));
 
-  if (!film){
+  if (!film) {
     return <NotFoundScreen/>;
-  }
-  else {
+  } else {
     return (
       <div className="player">
         <video src={film.videoLink} className="player__video" poster={film.posterImage}></video>

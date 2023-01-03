@@ -9,11 +9,13 @@ import FilmsList from '../../components/films-list/films-list';
 import {useEffect} from 'react';
 import {fetchFilmWithExtrasAction} from '../../store/api-actions/api-actions';
 import {AuthorizationStatus} from '../../consts';
+import {FilmsState} from '../../store/films/film-reducer';
 
 function FilmPageScreen(): JSX.Element {
   const {id} = useParams();
   const filmId = Number(id);
-  const {currentFilm, isDataLoading, similarFilms, authorizationStatus} = useAppSelector((state) => state);
+  const {currentFilm, isDataLoading, similarFilms} = useAppSelector<FilmsState>((state) => state.filmsState);
+  const authorizationStatus = useAppSelector<AuthorizationStatus>((state) => state.authorizationState.authorizationStatus);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

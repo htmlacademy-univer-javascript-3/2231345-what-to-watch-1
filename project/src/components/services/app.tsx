@@ -13,7 +13,9 @@ import {useAppSelector} from '../../hooks';
 import LoadingScreen from '../../pages/loading-screen/loading-screen';
 
 function App(): JSX.Element {
-  const {authorizationStatus, isDataLoading} = useAppSelector((state) => state);
+  const authorizationStatus = useAppSelector<AuthorizationStatus>((state) =>
+    state.authorizationState.authorizationStatus);
+  const isDataLoading = useAppSelector<boolean>((state) => state.filmsState.isDataLoading);
 
   if (authorizationStatus === AuthorizationStatus.Unknown || isDataLoading) {
     return (

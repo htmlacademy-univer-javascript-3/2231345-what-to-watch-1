@@ -1,4 +1,5 @@
 import {useAppSelector} from '../../hooks';
+import {Films} from '../../types/film';
 
 
 type GenresListProps = {
@@ -7,7 +8,7 @@ type GenresListProps = {
 
 
 export default function GenresList({onItemClick}: GenresListProps) {
-  const films = useAppSelector((state) => state.films);
+  const films = useAppSelector<Films>((state) => state.filmsState.films);
   const genres = new Map<string, string | null>();
   for (const film of films) {
     genres.set(film.genre, film.genre);

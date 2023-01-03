@@ -4,11 +4,12 @@ import CommentForm from '../../components/comment-form/comment-form';
 import {useAppSelector} from '../../hooks';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import {UserBlock} from '../../components/user-block/user-block';
+import {Film} from '../../types/film';
 
 function AddReviewScreen(): JSX.Element {
   const {id} = useParams();
   const filmId = Number(id);
-  const film = useAppSelector((state) => state.films.find((f) => f.id === filmId));
+  const film = useAppSelector<Film>((state) => state.filmsState.films.find((f : Film) => f.id === filmId));
 
   if (!film) {
     return <NotFoundScreen/>;

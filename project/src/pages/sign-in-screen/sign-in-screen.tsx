@@ -11,7 +11,7 @@ function SignInScreen(): JSX.Element {
 
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
-  const {authorizationStatus} = useAppSelector((state) => state);
+  const authorizationStatus = useAppSelector<AuthorizationStatus>((state) => state.authorizationState.authorizationStatus);
   const navigate = useNavigate();
 
   const onSubmit = (authData: AuthData) => {

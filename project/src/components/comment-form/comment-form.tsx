@@ -3,11 +3,12 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {postCommentAction} from '../../store/api-actions/api-actions';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import {useNavigate} from 'react-router-dom';
+import {Film} from '../../types/film';
 
 function CommentForm() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const {currentFilm} = useAppSelector((state) => state);
+  const currentFilm = useAppSelector<Film | null>((state) => state.filmsState.currentFilm);
   const commentRef = useRef<HTMLTextAreaElement>(null);
   const [filmRating, setRating] = useState(0);
 
@@ -43,7 +44,8 @@ function CommentForm() {
               Array(10).fill(1).map((i) =>
                 (
                   <>
-                    <input key={`star-${10 - i}`} className="rating__input" id={`star-${10 - i}`} type="radio" name="rating"
+                    <input key={`star-${10 - i}`} className="rating__input" id={`star-${10 - i}`} type="radio"
+                      name="rating"
                       onChange={handleOnChange} value={`${10 - i}`}
                     />
                     <label className="rating__label" htmlFor={`star-${10 - i}`}>Rating ${10 - i}</label>

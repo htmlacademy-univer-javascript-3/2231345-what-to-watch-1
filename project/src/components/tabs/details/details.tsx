@@ -1,8 +1,9 @@
 import {useAppSelector} from '../../../hooks';
 import NotFoundScreen from '../../../pages/not-found-screen/not-found-screen';
+import {Film} from '../../../types/film';
 
 function Details() {
-  const {currentFilm} = useAppSelector((state) => state);
+  const currentFilm = useAppSelector<Film>((state) => state.filmsState.currentFilm);
 
   if (!currentFilm) {
     return <NotFoundScreen/>;
