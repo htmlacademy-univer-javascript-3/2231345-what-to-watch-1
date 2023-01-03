@@ -7,14 +7,15 @@ import {
   loadComments,
   loadFilm,
   loadFilms,
-  loadPromoFilm, loadSimilarFilms,
-  setAuthorizationStatus,
+  loadPromoFilm,
+  loadSimilarFilms,
   setDataLoadingStatus,
-} from '../action';
+} from '../films/action';
 import {UserData} from '../../types/userData';
 import {AuthData} from '../../types/auth-data';
 import {Comments} from '../../types/comment';
 import {dropUser, saveUser} from '../../components/services/user-data';
+import {setAuthorizationStatus} from '../authentication/action';
 
 
 export const fetchFilmsAction = createAsyncThunk<Films, undefined, {
@@ -113,6 +114,9 @@ export const postCommentAction = createAsyncThunk<Comments, { comment: string, r
   extra: AxiosInstance
 }>(
   'data/postComment',
-  async (_arg, {dispatch, extra: api}) => await api.post(`${APIRoute.Comments}/${_arg.filmId}`, {comment: _arg.comment, rating: _arg.rating})
+  async (_arg, {dispatch, extra: api}) => await api.post(`${APIRoute.Comments}/${_arg.filmId}`, {
+    comment: _arg.comment,
+    rating: _arg.rating
+  })
 );
 

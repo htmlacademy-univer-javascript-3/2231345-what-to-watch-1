@@ -1,31 +1,21 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {
-  loadComments, loadFilm,
-  loadFilms,
-  loadPromoFilm,
-  loadSimilarFilms,
-  setAuthorizationStatus,
-  setDataLoadingStatus
-} from './action';
-import {Film, Films} from '../types/film';
-import {AuthorizationStatus} from '../consts';
-import {Comments} from '../types/comment';
+import {loadComments, loadFilm, loadFilms, loadPromoFilm, loadSimilarFilms, setDataLoadingStatus} from './action';
+import {Film, Films} from '../../types/film';
+import {Comments} from '../../types/comment';
 
-type InitialState = {
+export type FilmsState = {
   films: Films,
   promoFilm: Film | null
   isDataLoading: boolean,
-  authorizationStatus: AuthorizationStatus
   error: string | null,
   currentFilm: Film | null,
   comments: Comments,
   similarFilms: Films
 };
 
-const initialState: InitialState = {
+const initialState: FilmsState = {
   films: [],
   promoFilm: null,
-  authorizationStatus: AuthorizationStatus.Unknown,
   isDataLoading: false,
   error: null,
   comments: [],
@@ -33,16 +23,13 @@ const initialState: InitialState = {
   similarFilms: []
 };
 
-export const rootReducer = createReducer(initialState, (builder) => {
+export const filmReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(loadFilms, (state, action) => {
       state.films = action.payload;
     })
     .addCase(setDataLoadingStatus, (state, action) => {
       state.isDataLoading = action.payload;
-    })
-    .addCase(setAuthorizationStatus, (state, action) => {
-      state.authorizationStatus = action.payload;
     })
     .addCase(loadPromoFilm, (state, action) => {
       state.promoFilm = action.payload;

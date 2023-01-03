@@ -8,12 +8,13 @@ import ShowMoreButton from '../../components/show-more-button/show-more-button';
 import {useEffect, useState} from 'react';
 import {UserBlock} from '../../components/user-block/user-block';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
+import {FilmsState} from '../../store/films/film-reducer';
 
 function MainScreen() {
   const pageSize = 8;
 
   const navigate = useNavigate();
-  const {films, promoFilm} = useAppSelector((state) => state);
+  const {films, promoFilm} = useAppSelector<FilmsState>((state) => state.filmsState);
   const [page, setPage] = useState({count: 0, totalCount: 0, films: [] as Films});
   const [currentGenre, setCurrentGenre] = useState<string | null>(null);
 
@@ -27,8 +28,9 @@ function MainScreen() {
     setPage({count: 8, totalCount: totalCount, films: currentFilms});
   }, [currentGenre, films]);
 
-  if (!promoFilm)
-  {return <NotFoundScreen/>;}
+  if (!promoFilm) {
+    return <NotFoundScreen/>;
+  }
 
   return (
     <>
@@ -58,9 +60,7 @@ function MainScreen() {
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button"
-                  onClick={() => navigate(`/player/${promoFilm.id}`)}
-                >
+                <button className="btn btn--play film-card__button" type="button" onClick={() => navigate(`/player/${promoFilm.id}`)}>
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
                   </svg>

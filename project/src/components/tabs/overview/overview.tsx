@@ -1,10 +1,11 @@
 import {useAppSelector} from '../../../hooks';
 import NotFoundScreen from '../../../pages/not-found-screen/not-found-screen';
+import {Film} from '../../../types/film';
 
 function Overview() {
-  const {currentFilm} = useAppSelector((state) => state);
+  const currentFilm = useAppSelector<Film | null>((state) => state.filmsState.currentFilm);
 
-  if (!currentFilm){
+  if (!currentFilm) {
     return <NotFoundScreen/>;
   }
 
@@ -22,7 +23,9 @@ function Overview() {
         <p>{currentFilm.description}</p>
         <p className="film-card__director"><strong>Director: {currentFilm.director}</strong></p>
 
-        <p className="film-card__starring"><strong>Starring: {currentFilm.starring.slice(0, 4).join(', ')} and others</strong></p>
+        <p className="film-card__starring">
+          <strong>Starring: {currentFilm.starring.slice(0, 4).join(', ')} and others</strong>
+        </p>
       </div>
     </>
   );
