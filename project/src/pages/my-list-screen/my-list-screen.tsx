@@ -5,12 +5,12 @@ import {UserBlock} from '../../components/user-block/user-block';
 import {Films} from '../../types/film';
 
 function MyListScreen(): JSX.Element {
-  const films = useAppSelector<Films>((state) => state.filmsState.films);
+  const films = useAppSelector<Films>((state) => state.filmsState.favoriteFilms);
   return (
     <div className="user-page">
       <header className="page-header user-page__head">
         <Logo isLight={false}/>
-        <h1 className="page-title user-page__title">My list <span className="user-page__film-count">9</span></h1>
+        <h1 className="page-title user-page__title">My list <span className="user-page__film-count">{films.length}</span></h1>
         <UserBlock/>
       </header>
 

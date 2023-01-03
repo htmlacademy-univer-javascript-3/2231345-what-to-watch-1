@@ -1,22 +1,26 @@
-import {Films} from '../../types/film';
+import {Film, Films} from '../../types/film';
 import FilmsList from '../../components/films-list/films-list';
 import {useNavigate} from 'react-router-dom';
 import Logo from '../../components/logo/logo';
 import GenresList from '../../components/genres-list/genres-list';
-import {useAppSelector} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import ShowMoreButton from '../../components/show-more-button/show-more-button';
 import {useEffect, useState} from 'react';
 import {UserBlock} from '../../components/user-block/user-block';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import {FilmsState} from '../../store/films/film-reducer';
+import {fetchFavoriteFilmsAction} from '../../store/api-actions/api-actions';
+import {loadPromoFilm} from '../../store/films/action';
+import {AddFavoriteButton} from '../../components/add-favorite-button/add-favorite-button';
 
 function MainScreen() {
   const pageSize = 8;
 
   const navigate = useNavigate();
-  const {films, promoFilm} = useAppSelector<FilmsState>((state) => state.filmsState);
+  const {films, promoFilm, favoriteFilms} = useAppSelector<FilmsState>((state) => state.filmsState);
   const [page, setPage] = useState({count: 0, totalCount: 0, films: [] as Films});
   const [currentGenre, setCurrentGenre] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
 
   const filterFilms = (count: number, genre: string | null) => {
     const filteredFilms = films.filter((film) => !genre || film.genre === genre);
@@ -27,6 +31,10 @@ function MainScreen() {
     const {currentFilms, totalCount} = filterFilms(pageSize, currentGenre);
     setPage({count: 8, totalCount: totalCount, films: currentFilms});
   }, [currentGenre, films]);
+
+  useEffect(() => {
+    dispatch(fetchFavoriteFilmsAction());
+  }, [promoFilm]);
 
   if (!promoFilm) {
     return <NotFoundScreen/>;
@@ -60,19 +68,17 @@ function MainScreen() {
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button" onClick={() => navigate(`/player/${promoFilm.id}`)}>
+                <button className="btn btn--play film-card__button" type="button"
+                  onClick={() => navigate(`/player/${promoFilm.id}`)}
+                >
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
                   </svg>
                   <span>Play</span>
                 </button>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
-                  </svg>
-                  <span>My list</span>
-                  <span className="film-card__count">9</span>
-                </button>
+                <AddFavoriteButton film={promoFilm} favoriteFilms={favoriteFilms}
+                  action={(film: Film) => loadPromoFilm(film)}
+                />
               </div>
             </div>
           </div>
@@ -112,6 +118,5 @@ function MainScreen() {
     </>
   );
 }
-
 
 export default MainScreen;
