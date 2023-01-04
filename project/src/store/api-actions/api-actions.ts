@@ -4,7 +4,8 @@ import {AppDispatch, State} from '../../types/state';
 import {Film, Films} from '../../types/film';
 import {APIRoute, AuthorizationStatus} from '../../consts';
 import {
-  loadComments, loadFavoriteFilms,
+  loadComments,
+  loadFavoriteFilms,
   loadFilm,
   loadFilms,
   loadPromoFilm,
@@ -67,6 +68,21 @@ export const fetchFilmWithExtrasAction = createAsyncThunk<void, number, {
   },
 );
 
+export const fetchFilm = createAsyncThunk<void, number, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>(
+  'data/fetchFilmWithExtrasById',
+  async (_arg, {dispatch, extra: api}) => {
+    dispatch(setDataLoadingStatus(true));
+    const film = await api.get<Film>(`${APIRoute.Films}/${_arg}`);
+    dispatch(loadFilm(film.data));
+    dispatch(setDataLoadingStatus(false));
+  },
+);
+
+
 export const checkAuthAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch,
   state: State,
@@ -115,10 +131,14 @@ export const postCommentAction = createAsyncThunk<Comments, { comment: string, r
   extra: AxiosInstance
 }>(
   'data/postComment',
-  async (_arg, {dispatch, extra: api}) => await api.post(`${APIRoute.Comments}/${_arg.filmId}`, {
-    comment: _arg.comment,
-    rating: _arg.rating
-  })
+  async (_arg, {dispatch, extra: api}) => {
+    const response = await api.post<Comments>(`${APIRoute.Comments}/${_arg.filmId}/ssss`, {
+      comment: _arg.comment,
+      rating: _arg.rating
+    });
+    dispatch(loadComments(response.data));
+    return response.data;
+  }
 );
 
 export const postIsFavoriteAction = createAsyncThunk<Film, PostIsFavorite, {

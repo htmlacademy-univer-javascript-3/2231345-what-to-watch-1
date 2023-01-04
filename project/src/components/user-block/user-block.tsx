@@ -16,9 +16,9 @@ export function UserBlock() {
           <>
             <li className="user-block__item">
               <div className="user-block__avatar">
-                <button className='button__transparent' onClick={() => navigate(AppRoute.MyList)}>
-                  <img src={getAvatarUri()} alt="User avatar" width="63" height="63"/>
-                </button>
+                <img src={getAvatarUri()} alt="User avatar" width="63" height="63"
+                  onClick={() => navigate(AppRoute.MyList)}
+                />
               </div>
             </li>
             <li className="user-block__item">

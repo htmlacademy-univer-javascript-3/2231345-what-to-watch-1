@@ -39,7 +39,12 @@ function App(): JSX.Element {
             />
             <Route path='films/:id'>
               <Route index element={<FilmPageScreen/>}/>
-              <Route path='review' element={<AddReviewScreen/>}/>
+              <Route path='review' element={
+                <PrivateRoute>
+                  <AddReviewScreen/>
+                </PrivateRoute>
+              }
+              />
             </Route>
             <Route path='player/:id' element={<PlayerScreen/>}/>
           </Route>

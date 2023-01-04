@@ -1,21 +1,53 @@
 import {Link, useParams} from 'react-router-dom';
-import {AppRoute} from '../../consts';
-import {useAppSelector} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
-import {Film} from '../../types/film';
 import {useEffect, useRef, useState} from 'react';
+import LoadingScreen from '../loading-screen/loading-screen';
+import {Film} from '../../types/film';
+import {fetchFilm} from '../../store/api-actions/api-actions';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 
 function PlayerScreen(): JSX.Element {
-  const {id} = useParams();
-  const filmId = Number(id);
-  const film = useAppSelector((state) => state.filmsState.films.find((f: Film) => f.id === filmId));
+  const filmId = Number(useParams().id);
+  const currentFilm = useAppSelector<Film>((state) => state.filmsState.currentFilm);
+  const isDataLoading = useAppSelector<boolean>((state) => state.filmsState.isDataLoading);
 
   const playerRef = useRef<HTMLVideoElement | null>(null);
+  const playerElement = document.querySelector('.player');
+  const dispatch = useAppDispatch();
+
   const [isPlaying, setIsPlaying] = useState(true);
+  const [timeLeft, setTimeLeft] = useState(currentFilm ? currentFilm?.runTime * 60 : 0);
 
   const onPlayButtonClick = () => {
     setIsPlaying(!isPlaying);
   };
+
+  dayjs.extend(duration);
+
+  const getProgress = () => {
+    if (!currentFilm) {
+      return 0;
+    }
+    return (currentFilm?.runTime * 60 - timeLeft) / (currentFilm?.runTime * 60) * 100;
+  };
+
+  const onFullScreenButtonClick = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      playerElement?.requestFullscreen();
+    }
+  };
+
+  useEffect(() => {
+    if (isPlaying && timeLeft > 0) {
+      setTimeout(() => {
+        setTimeLeft(timeLeft - 1);
+      }, 1000);
+    }
+  });
 
   useEffect(() => {
     if (playerRef.current !== null) {
@@ -27,24 +59,45 @@ function PlayerScreen(): JSX.Element {
     }
   }, [isPlaying]);
 
-  if (!film) {
+  useEffect(() => {
+    if (currentFilm?.id !== filmId) {
+      dispatch(fetchFilm(filmId));
+    }
+  }, [filmId, currentFilm?.id, dispatch]);
+
+  useEffect(() => {
+    if (currentFilm) {
+      setTimeLeft(currentFilm?.runTime * 60);
+    }
+  }, [currentFilm]);
+
+  if (isDataLoading) {
+    return <LoadingScreen/>;
+  } else if (!currentFilm) {
     return <NotFoundScreen/>;
   } else {
     return (
       <div className="player">
-        <video ref={playerRef} src={film.videoLink} className="player__video" poster={film.posterImage}></video>
+        <video ref={playerRef} src={currentFilm.videoLink} className="player__video"
+          poster={currentFilm.posterImage} autoPlay
+        >
+        </video>
 
-        <Link to={AppRoute.Main}>
-          <button type="button" className="player__exit">Exit</button>
-        </Link>
+        <Link to={`/films/${currentFilm?.id}`} type="button" className="player__exit">Exit</Link>
 
         <div className="player__controls">
           <div className="player__controls-row">
             <div className="player__time">
-              <progress className="player__progress" value="30" max="100"></progress>
-              <div className="player__toggler" style={{left: '30%'}}>Toggler</div>
+              <progress className="player__progress" value={getProgress()} max="100"></progress>
+              <div className="player__toggler" style={{left: `${getProgress()}%`}}>Toggler</div>
             </div>
-            <div className="player__time-value">1:30:29</div>
+            <div className="player__time-value">
+              {
+                dayjs
+                  .duration(timeLeft || 0, 'seconds')
+                  .format(`${timeLeft || 0 > 3600 ? 'H[:]m[:]ss' : 'm[:]ss'}`)
+              }
+            </div>
           </div>
 
           <div className="player__controls-row">
@@ -71,7 +124,7 @@ function PlayerScreen(): JSX.Element {
             </button>
             <div className="player__name">Transpotting</div>
 
-            <button type="button" className="player__full-screen">
+            <button type="button" className="player__full-screen" onClick={onFullScreenButtonClick}>
               <svg viewBox="0 0 27 27" width="27" height="27">
                 <use xlinkHref="#full-screen"></use>
               </svg>

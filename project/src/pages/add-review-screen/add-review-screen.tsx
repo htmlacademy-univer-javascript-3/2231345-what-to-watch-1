@@ -9,7 +9,7 @@ import {Film} from '../../types/film';
 function AddReviewScreen(): JSX.Element {
   const {id} = useParams();
   const filmId = Number(id);
-  const film = useAppSelector<Film>((state) => state.filmsState.films.find((f : Film) => f.id === filmId));
+  const film = useAppSelector<Film>((state) => state.filmsState.films.find((f: Film) => f.id === filmId));
 
   if (!film) {
     return <NotFoundScreen/>;
@@ -47,9 +47,7 @@ function AddReviewScreen(): JSX.Element {
             />
           </div>
         </div>
-
-        <CommentForm/>
-
+        <CommentForm film={film}/>
       </section>
     );
   }

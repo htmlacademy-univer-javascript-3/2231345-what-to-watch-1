@@ -3,8 +3,15 @@ import {FilmPageTab} from '../../consts';
 import Reviews from './reviews/reviews';
 import Details from './details/details';
 import Overview from './overview/overview';
+import {Film} from '../../types/film';
+import {Comments} from '../../types/comment';
 
-function Tabs() {
+type TabsProps = {
+  film: Film,
+  comments: Comments
+}
+
+function Tabs({film, comments}: TabsProps) {
   const [currentTab, setCurrentTab] = useState<FilmPageTab>(FilmPageTab.Overview);
 
   const setTab = (tab: FilmPageTab) => {
@@ -14,14 +21,14 @@ function Tabs() {
     setCurrentTab(tab);
   };
 
-  const getCurrentTab = (tab: string) => {
+  const getCurrentTab = (tab: FilmPageTab) => {
     switch (tab) {
       case FilmPageTab.Reviews:
-        return <Reviews/>;
+        return <Reviews reviews={comments}/>;
       case FilmPageTab.Details:
-        return <Details/>;
+        return <Details {...film}/>;
       case FilmPageTab.Overview:
-        return <Overview/>;
+        return <Overview {...film}/>;
     }
   };
 
@@ -30,13 +37,13 @@ function Tabs() {
       <nav className="film-nav film-card__nav">
         <ul className="film-nav__list">
           <li className={`film-nav__item ${currentTab === FilmPageTab.Overview && 'film-nav__item--active'}`}>
-            <button onClick={() => setTab(FilmPageTab.Overview)} className='film-nav__link'>Overview</button>
+            <a onClick={() => setTab(FilmPageTab.Overview)} className='film-nav__link'>Overview</a>
           </li>
           <li className={`film-nav__item ${currentTab === FilmPageTab.Details && 'film-nav__item--active'}`}>
-            <button onClick={() => setTab(FilmPageTab.Details)} className={'film-nav__link'}>Details</button>
+            <a onClick={() => setTab(FilmPageTab.Details)} className={'film-nav__link'}>Details</a>
           </li>
           <li className={`film-nav__item ${currentTab === FilmPageTab.Reviews && 'film-nav__item--active'}`}>
-            <button onClick={() => setTab(FilmPageTab.Reviews)} className='film-nav__link'>Reviews</button>
+            <a onClick={() => setTab(FilmPageTab.Reviews)} className='film-nav__link'>Reviews</a>
           </li>
         </ul>
       </nav>

@@ -1,11 +1,19 @@
 import FilmsList from '../../components/films-list/films-list';
-import {useAppSelector} from '../../hooks';
+import {useAppDispatch, useAppSelector} from '../../hooks';
 import Logo from '../../components/logo/logo';
 import {UserBlock} from '../../components/user-block/user-block';
 import {Films} from '../../types/film';
+import {useEffect} from 'react';
+import {fetchFavoriteFilmsAction} from '../../store/api-actions/api-actions';
 
 function MyListScreen(): JSX.Element {
   const films = useAppSelector<Films>((state) => state.filmsState.favoriteFilms);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchFavoriteFilmsAction());
+  }, [dispatch]);
+
   return (
     <div className="user-page">
       <header className="page-header user-page__head">

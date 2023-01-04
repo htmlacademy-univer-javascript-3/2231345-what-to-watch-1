@@ -1,25 +1,29 @@
-import {useAppSelector} from '../../../hooks';
-import NotFoundScreen from '../../../pages/not-found-screen/not-found-screen';
-import {Film} from '../../../types/film';
+type DetailsProps = {
+  director: string,
+  starring: string[],
+  runTime: number,
+  genre: string,
+  released: number
+}
 
-function Details() {
-  const currentFilm = useAppSelector<Film>((state) => state.filmsState.currentFilm);
-
-  if (!currentFilm) {
-    return <NotFoundScreen/>;
-  }
+function Details({director, runTime, starring, genre, released}: DetailsProps) {
+  const convertTime = (totalMinutes: number) => {
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    return hours === 0 ? `${minutes}m` : `${hours}h ${minutes}m`;
+  };
 
   return (
     <div className="film-card__text film-card__row">
       <div className="film-card__text-col">
         <p className="film-card__details-item">
           <strong className="film-card__details-name">Director</strong>
-          <span className="film-card__details-value">{currentFilm.director}</span>
+          <span className="film-card__details-value">{director}</span>
         </p>
         <p className="film-card__details-item">
           <strong className="film-card__details-name">Starring</strong>
           <span className="film-card__details-value">
-            {currentFilm.starring.map((star) => (<p key={star}>{star}</p>))}
+            {starring.map((star) => (<p key={star}>{star}</p>))}
           </span>
         </p>
       </div>
@@ -27,15 +31,15 @@ function Details() {
       <div className="film-card__text-col">
         <p className="film-card__details-item">
           <strong className="film-card__details-name">Run Time</strong>
-          <span className="film-card__details-value">1h 39m</span>
+          <span className="film-card__details-value">{convertTime(runTime)}</span>
         </p>
         <p className="film-card__details-item">
           <strong className="film-card__details-name">Genre</strong>
-          <span className="film-card__details-value">{currentFilm.genre}</span>
+          <span className="film-card__details-value">{genre}</span>
         </p>
         <p className="film-card__details-item">
           <strong className="film-card__details-name">Released</strong>
-          <span className="film-card__details-value">{currentFilm.released}</span>
+          <span className="film-card__details-value">{released}</span>
         </p>
       </div>
     </div>
