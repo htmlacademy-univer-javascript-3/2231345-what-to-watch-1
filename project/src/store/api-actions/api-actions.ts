@@ -15,7 +15,7 @@ import {
 import {UserData} from '../../types/userData';
 import {AuthData} from '../../types/auth-data';
 import {Comments} from '../../types/comment';
-import {dropUser, saveUser} from '../../components/services/user-data';
+import {dropUser, saveUser} from '../../services/user-data';
 import {setAuthorizationStatus} from '../authentication/action';
 import {PostIsFavorite} from '../../types/post-is-favorite';
 

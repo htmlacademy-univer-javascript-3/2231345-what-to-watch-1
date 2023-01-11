@@ -2,7 +2,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {AppRoute, AuthorizationStatus} from '../../consts';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import {logoutAction} from '../../store/api-actions/api-actions';
-import {getAvatarUri} from '../services/user-data';
+import {getAvatarUri} from '../../services/user-data';
 
 export function UserBlock() {
   const dispatch = useAppDispatch();
