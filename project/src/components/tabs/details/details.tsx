@@ -20,12 +20,12 @@ function Details({director, runTime, starring, genre, released}: DetailsProps) {
           <strong className="film-card__details-name">Director</strong>
           <span className="film-card__details-value">{director}</span>
         </p>
-        <p className="film-card__details-item">
+        <div className="film-card__details-item">
           <strong className="film-card__details-name">Starring</strong>
-          <span className="film-card__details-value">
+          <div className="film-card__details-value">
             {starring.map((star) => (<p key={star}>{star}</p>))}
-          </span>
-        </p>
+          </div>
+        </div>
       </div>
 
       <div className="film-card__text-col">
