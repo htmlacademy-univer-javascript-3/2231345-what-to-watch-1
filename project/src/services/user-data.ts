@@ -1,4 +1,4 @@
-import {UserData} from '../../types/userData';
+import {UserData} from '../types/userData';
 
 const AUTH_TOKEN_KEY_NAME = 'what-to-watch-token';
 const AVATAR_URI_KEY_NAME = 'what-to-watch-avatar-uri';

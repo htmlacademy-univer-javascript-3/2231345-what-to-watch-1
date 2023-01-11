@@ -34,7 +34,7 @@ function MainScreen() {
 
   useEffect(() => {
     dispatch(fetchFavoriteFilmsAction());
-  }, [promoFilm]);
+  }, [promoFilm, dispatch]);
 
   if (!promoFilm) {
     return <NotFoundScreen/>;

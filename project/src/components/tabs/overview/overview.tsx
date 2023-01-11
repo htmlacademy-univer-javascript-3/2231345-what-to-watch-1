@@ -1,30 +1,48 @@
-import {useAppSelector} from '../../../hooks';
-import NotFoundScreen from '../../../pages/not-found-screen/not-found-screen';
-import {Film} from '../../../types/film';
+type OverviewProps = {
+  rating: number,
+  scoresCount: number,
+  description: string,
+  director: string,
+  starring: string[]
+}
 
-function Overview() {
-  const currentFilm = useAppSelector<Film | null>((state) => state.filmsState.currentFilm);
+function Overview({rating, description, director, scoresCount, starring}: OverviewProps) {
 
-  if (!currentFilm) {
-    return <NotFoundScreen/>;
-  }
+
+  const getScoreDescription = (score: number) => {
+    if (0 <= score && score < 3) {
+      return 'Bad';
+    }
+    if (3 <= score && score < 5) {
+      return 'Normal';
+    }
+    if (5 <= score && score < 8) {
+      return 'Good';
+    }
+    if (8 <= score && score < 10) {
+      return 'Very good';
+    }
+    if (10 <= score) {
+      return 'Awesome';
+    }
+  };
 
   return (
     <>
       <div className="film-rating">
-        <div className="film-rating__score">{currentFilm.rating}</div>
+        <div className="film-rating__score">{rating}</div>
         <p className="film-rating__meta">
-          <span className="film-rating__level">Very good</span>
-          <span className="film-rating__count">{currentFilm.rating} ratings</span>
+          <span className="film-rating__level">{getScoreDescription(rating)}</span>
+          <span className="film-rating__count">{scoresCount} ratings</span>
         </p>
       </div>
 
       <div className="film-card__text">
-        <p>{currentFilm.description}</p>
-        <p className="film-card__director"><strong>Director: {currentFilm.director}</strong></p>
+        <p>{description}</p>
+        <p className="film-card__director"><strong>Director: {director}</strong></p>
 
         <p className="film-card__starring">
-          <strong>Starring: {currentFilm.starring.slice(0, 4).join(', ')} and others</strong>
+          <strong>Starring: {starring.slice(0, 4).join(', ')} and others</strong>
         </p>
       </div>
     </>

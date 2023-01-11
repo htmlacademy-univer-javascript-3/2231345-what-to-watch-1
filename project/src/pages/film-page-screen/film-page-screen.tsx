@@ -5,17 +5,14 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import {UserBlock} from '../../components/user-block/user-block';
 import LoadingScreen from '../loading-screen/loading-screen';
-import FilmsList from '../../components/films-list/films-list';
 import {useEffect} from 'react';
-import {
-  fetchFavoriteFilmsAction,
-  fetchFilmWithExtrasAction
-} from '../../store/api-actions/api-actions';
+import {fetchFavoriteFilmsAction, fetchFilmWithExtrasAction} from '../../store/api-actions/api-actions';
 import {AuthorizationStatus} from '../../consts';
 import {FilmsState} from '../../store/films/film-reducer';
 import {Film} from '../../types/film';
 import {loadFilm} from '../../store/films/action';
 import {AddFavoriteButton} from '../../components/add-favorite-button/add-favorite-button';
+import {SimilarFilmsList} from '../../components/similar-films-list/similar-films-list';
 
 function FilmPageScreen(): JSX.Element {
   const {id} = useParams();
@@ -24,7 +21,8 @@ function FilmPageScreen(): JSX.Element {
     currentFilm,
     isDataLoading,
     similarFilms,
-    favoriteFilms
+    favoriteFilms,
+    comments
   } = useAppSelector<FilmsState>((state) => state.filmsState);
   const authorizationStatus = useAppSelector<AuthorizationStatus>((state) => state.authorizationState.authorizationStatus);
   const dispatch = useAppDispatch();
@@ -34,11 +32,11 @@ function FilmPageScreen(): JSX.Element {
     if (!currentFilm || currentFilm.id !== filmId) {
       dispatch(fetchFilmWithExtrasAction(filmId));
     }
-  }, []);
+  }, [filmId, currentFilm, dispatch]);
 
   useEffect(() => {
     dispatch(fetchFavoriteFilmsAction());
-  }, [currentFilm]);
+  }, [currentFilm, dispatch]);
 
   if (isDataLoading) {
     return <LoadingScreen/>;
@@ -80,7 +78,9 @@ function FilmPageScreen(): JSX.Element {
                   </svg>
                   <span>Play</span>
                 </button>
-                <AddFavoriteButton film={currentFilm} favoriteFilms={favoriteFilms} action={(film: Film) => loadFilm(film)}/>
+                <AddFavoriteButton film={currentFilm} favoriteFilms={favoriteFilms}
+                  action={(film: Film) => loadFilm(film)}
+                />
                 {
                   authorizationStatus === AuthorizationStatus.Auth &&
                   <Link to={`/films/${currentFilm.id}/review`} className="btn film-card__button">Add review</Link>
@@ -96,7 +96,7 @@ function FilmPageScreen(): JSX.Element {
               <img src={currentFilm.posterImage} alt={`${currentFilm.name} poster`} width="218" height="327"/>
             </div>
 
-            <Tabs/>
+            <Tabs film={currentFilm} comments={comments}/>
 
           </div>
         </div>
@@ -106,7 +106,7 @@ function FilmPageScreen(): JSX.Element {
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
 
-          <FilmsList films={similarFilms}/>
+          <SimilarFilmsList similarFilms={similarFilms}/>
 
         </section>
 

@@ -12,7 +12,7 @@ function Review({comment}: ReviewProps) {
 
         <footer className="review__details">
           <cite className="review__author">{comment.user.name}</cite>
-          <time className="review__date" dateTime="2015-11-18">{comment.date}</time>
+          <time className="review__date">{new Date(comment.date).toLocaleDateString('en-GB')}</time>
         </footer>
       </blockquote>
 

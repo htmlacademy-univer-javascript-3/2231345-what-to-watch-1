@@ -5,7 +5,7 @@ import {
   loadFilm,
   loadFilms,
   loadPromoFilm,
-  loadSimilarFilms,
+  loadSimilarFilms, setDataLoadingError,
   setDataLoadingStatus
 } from './action';
 import {Film, Films} from '../../types/film';
@@ -15,7 +15,7 @@ export type FilmsState = {
   films: Films,
   promoFilm: Film | null
   isDataLoading: boolean,
-  error: string | null,
+  hasError: boolean,
   currentFilm: Film | null,
   comments: Comments,
   similarFilms: Films,
@@ -26,7 +26,7 @@ const initialState: FilmsState = {
   films: [],
   promoFilm: null,
   isDataLoading: false,
-  error: null,
+  hasError: false,
   comments: [],
   currentFilm: null,
   similarFilms: [],
@@ -55,5 +55,8 @@ export const filmReducer = createReducer(initialState, (builder) => {
     })
     .addCase(loadFavoriteFilms, (state, action) => {
       state.favoriteFilms = action.payload;
+    })
+    .addCase(setDataLoadingError, (state, action) => {
+      state.hasError = action.payload;
     });
 });
